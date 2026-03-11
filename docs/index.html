@@ -5,113 +5,284 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Morlongo Weather Forecast</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
+            background: linear-gradient(180deg, #e8f4f8 0%, #f5f7fa 100%);
             color: #333;
             line-height: 1.6;
+            min-height: 100vh;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
+
+        /* Header */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        header h1 { font-size: 1.5em; font-weight: 600; }
+        header p { opacity: 0.85; font-size: 0.85em; margin-top: 5px; }
+        .update-time {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        /* Current Weather Card */
+        .current-weather {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .current-main {
+            text-align: center;
+            min-width: 150px;
+        }
+        .current-main .wi {
+            font-size: 4em;
+            color: #2a5298;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .current-temp {
+            font-size: 3.5em;
+            font-weight: 300;
+            color: #1e3c72;
+        }
+        .current-temp sup { font-size: 0.4em; vertical-align: top; }
+        .current-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .current-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             text-align: center;
         }
-        header h1 { font-size: 1.8em; margin-bottom: 5px; }
-        header p { opacity: 0.9; font-size: 0.95em; }
-        .meta {
-            background: white;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+        .detail-item {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .detail-item .wi {
+            font-size: 1.5em;
+            color: #2a5298;
+            margin-bottom: 5px;
+        }
+        .detail-value { font-size: 1.3em; font-weight: 600; color: #1e3c72; }
+        .detail-label { font-size: 0.75em; color: #888; text-transform: uppercase; }
+
+        /* Daily Forecast */
+        .daily-forecast {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
+            margin: 20px 0;
         }
-        .meta span { font-size: 0.9em; color: #666; }
-        .card {
+        .day-card {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
         }
-        .card-header {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
+        .day-card:hover { transform: translateY(-3px); }
+        .day-card.today {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            color: white;
+        }
+        .day-card.today .day-icon { color: white; }
+        .day-card.today .day-temp-min { color: rgba(255,255,255,0.7); }
+        .day-name { font-weight: 600; font-size: 0.85em; margin-bottom: 8px; }
+        .day-icon { font-size: 2em; color: #2a5298; margin: 8px 0; }
+        .day-temps { margin: 8px 0; }
+        .day-temp-max { font-size: 1.2em; font-weight: 600; }
+        .day-temp-min { font-size: 0.9em; color: #888; margin-left: 5px; }
+        .day-precip {
+            font-size: 0.75em;
+            color: #3498db;
+            margin-top: 5px;
+        }
+        .day-precip .wi { margin-right: 3px; }
+        .day-wind {
+            font-size: 0.7em;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .chart-title {
+            font-size: 0.9em;
             font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .card-body { padding: 20px; }
-        .chart-container { height: 300px; }
+        .chart-title .wi { color: #2a5298; }
+        .chart-container { height: 180px; }
+
+        /* Detailed Table */
+        .details-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .details-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .hourly-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            min-width: 600px;
         }
         th, td {
             padding: 10px 8px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #eee;
         }
-        th { background: #f8f9fa; font-weight: 600; }
-        tr:hover { background: #f8f9fa; }
-        .temp-raw { color: #999; }
-        .temp-debiased { color: #667eea; font-weight: 600; }
-        .diff-pos { color: #e74c3c; }
-        .diff-neg { color: #3498db; }
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #555;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover { background: #f8fafc; }
+        .temp-cell { color: #e74c3c; font-weight: 600; }
+        .humid-cell { color: #3498db; }
+        .wind-cell { color: #27ae60; }
+        .precip-cell { color: #9b59b6; }
+
+        /* Footer */
         footer {
             text-align: center;
             padding: 20px;
-            color: #666;
-            font-size: 0.85em;
+            color: #888;
+            font-size: 0.8em;
         }
-        footer a { color: #667eea; }
-        @media (max-width: 600px) {
-            .meta { flex-direction: column; }
-            table { font-size: 0.8em; }
-            th, td { padding: 8px 4px; }
+        footer a { color: #2a5298; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .current-weather { flex-direction: column; }
+            .current-details { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .detail-item { padding: 10px; }
+            .daily-forecast { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+            .day-card { padding: 10px 5px; }
+            .day-icon { font-size: 1.5em; }
+            .chart-container { height: 150px; }
+        }
+        @media (max-width: 500px) {
+            .daily-forecast { grid-template-columns: repeat(3, 1fr); }
+            .day-card:nth-child(4), .day-card:nth-child(5) {
+                grid-column: span 1;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Morlongo Weather Forecast</h1>
-        <p>ML-debiased MeteoSwiss ICON forecast (46.02°N, 8.24°E, ~570m)</p>
+        <h1>Morlongo Weather</h1>
+        <p>ML-corrected forecast &bull; 46.02°N, 8.24°E &bull; 570m</p>
+        <div class="update-time" id="updateTime">Loading...</div>
     </header>
 
     <div class="container">
-        <div class="meta" id="meta">
-            <span>Loading...</span>
-        </div>
-
-        <div class="card">
-            <div class="card-header">Temperature Forecast (5 days)</div>
-            <div class="card-body">
-                <div class="chart-container">
-                    <canvas id="tempChart"></canvas>
+        <!-- Current Weather -->
+        <div class="current-weather" id="currentWeather">
+            <div class="current-main">
+                <i class="wi wi-day-sunny"></i>
+                <div class="current-temp">--<sup>°C</sup></div>
+                <div class="current-label">Now</div>
+            </div>
+            <div class="current-details">
+                <div class="detail-item">
+                    <i class="wi wi-humidity"></i>
+                    <div class="detail-value" id="currentHumidity">--%</div>
+                    <div class="detail-label">Humidity</div>
+                </div>
+                <div class="detail-item">
+                    <i class="wi wi-strong-wind"></i>
+                    <div class="detail-value" id="currentWind">-- km/h</div>
+                    <div class="detail-label">Wind</div>
+                </div>
+                <div class="detail-item">
+                    <i class="wi wi-raindrop"></i>
+                    <div class="detail-value" id="currentPrecip">-- mm</div>
+                    <div class="detail-label">Precip (24h)</div>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">Hourly Forecast</div>
-            <div class="card-body" style="overflow-x: auto;">
-                <table id="forecastTable">
+        <!-- Daily Forecast -->
+        <div class="daily-forecast" id="dailyForecast"></div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-title"><i class="wi wi-thermometer"></i> Temperature</div>
+                <div class="chart-container"><canvas id="tempChart"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title"><i class="wi wi-rain"></i> Precipitation &amp; <i class="wi wi-strong-wind"></i> Wind</div>
+                <div class="chart-container"><canvas id="precipWindChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Detailed Table -->
+        <div class="details-section">
+            <div class="details-title">Hourly Details</div>
+            <div class="hourly-scroll">
+                <table id="hourlyTable">
                     <thead>
                         <tr>
                             <th>Time</th>
-                            <th>Temp (raw)</th>
-                            <th>Temp (debiased)</th>
+                            <th>Temp</th>
                             <th>Humidity</th>
                             <th>Wind</th>
                             <th>Gusts</th>
-                            <th>Rain</th>
+                            <th>Precip</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -121,78 +292,196 @@
     </div>
 
     <footer>
-        <p>Data: <a href="https://open-meteo.com">Open-Meteo</a> (MeteoSwiss ICON-CH2)</p>
-        <p>Debiasing: XGBoost trained on local station data</p>
-        <p><a href="https://github.com/real-slin-shady/morlongo-forecast">Source Code</a></p>
+        <p>Data: <a href="https://open-meteo.com">Open-Meteo</a> (MeteoSwiss ICON-CH2) &bull; Debiasing: XGBoost</p>
+        <p><a href="https://github.com/Real-Slin-Shady/morlongo-forecast">GitHub</a></p>
     </footer>
 
     <script>
         let tempChart = null;
+        let precipWindChart = null;
+
+        // Weather code to icon mapping
+        function getWeatherIcon(code, isDay = true) {
+            const icons = {
+                0: isDay ? 'wi-day-sunny' : 'wi-night-clear',
+                1: isDay ? 'wi-day-sunny' : 'wi-night-clear',
+                2: isDay ? 'wi-day-cloudy' : 'wi-night-alt-cloudy',
+                3: 'wi-cloudy',
+                45: 'wi-fog',
+                48: 'wi-fog',
+                51: 'wi-sprinkle',
+                53: 'wi-sprinkle',
+                55: 'wi-showers',
+                61: 'wi-rain',
+                63: 'wi-rain',
+                65: 'wi-rain',
+                71: 'wi-snow',
+                73: 'wi-snow',
+                75: 'wi-snow',
+                80: 'wi-showers',
+                81: 'wi-showers',
+                82: 'wi-rain',
+                95: 'wi-thunderstorm',
+                96: 'wi-thunderstorm',
+                99: 'wi-thunderstorm'
+            };
+            return icons[code] || (isDay ? 'wi-day-cloudy' : 'wi-night-alt-cloudy');
+        }
 
         async function loadForecast() {
             try {
-                const response = await fetch('forecast.json');
+                const response = await fetch('forecast.json?t=' + Date.now());
                 const data = await response.json();
-                renderMeta(data.meta);
-                renderChart(data.hourly);
-                renderTable(data.hourly);
+                renderAll(data);
             } catch (error) {
-                document.getElementById('meta').innerHTML =
-                    '<span style="color: #e74c3c;">Error loading forecast. Please try again later.</span>';
-                console.error(error);
+                console.error('Error loading forecast:', error);
+                document.getElementById('updateTime').textContent = 'Error loading data';
             }
         }
 
-        function renderMeta(meta) {
-            const generated = new Date(meta.generated_at);
-            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('meta').innerHTML = `
-                <span><strong>Location:</strong> ${meta.location} (${meta.lat.toFixed(3)}°N, ${meta.lon.toFixed(3)}°E)</span>
-                <span><strong>Updated:</strong> ${generated.toLocaleDateString('en-US', options)}</span>
-                <span><strong>Forecast:</strong> ${meta.forecast_hours} hours</span>
-            `;
+        function renderAll(data) {
+            renderUpdateTime(data.meta);
+            renderCurrentWeather(data.hourly);
+            renderDailyForecast(data.hourly);
+            renderCharts(data.hourly);
+            renderHourlyTable(data.hourly);
         }
 
-        function renderChart(hourly) {
-            const ctx = document.getElementById('tempChart').getContext('2d');
+        function renderUpdateTime(meta) {
+            const d = new Date(meta.generated_at);
+            document.getElementById('updateTime').textContent =
+                `Updated: ${d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+        }
 
-            const labels = hourly.map(h => {
+        function renderCurrentWeather(hourly) {
+            const now = new Date();
+            const currentHour = hourly.find(h => new Date(h.time) >= now) || hourly[0];
+            const next24h = hourly.slice(0, 24);
+            const precip24h = next24h.reduce((sum, h) => sum + (h.debiased.rain || 0), 0);
+
+            const weatherCode = currentHour.raw.weather_code || 0;
+            const isDay = now.getHours() >= 6 && now.getHours() < 20;
+            const icon = getWeatherIcon(weatherCode, isDay);
+
+            document.querySelector('.current-main').innerHTML = `
+                <i class="wi ${icon}"></i>
+                <div class="current-temp">${Math.round(currentHour.debiased.temperature)}<sup>°C</sup></div>
+                <div class="current-label">Now</div>
+            `;
+            document.getElementById('currentHumidity').textContent = `${Math.round(currentHour.debiased.humidity)}%`;
+            document.getElementById('currentWind').textContent = `${Math.round(currentHour.debiased.wind_speed)} km/h`;
+            document.getElementById('currentPrecip').textContent = `${precip24h.toFixed(1)} mm`;
+        }
+
+        function renderDailyForecast(hourly) {
+            // Group by day
+            const days = {};
+            hourly.forEach(h => {
+                const d = new Date(h.time);
+                const key = d.toDateString();
+                if (!days[key]) days[key] = { date: d, hours: [] };
+                days[key].hours.push(h);
+            });
+
+            const container = document.getElementById('dailyForecast');
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const today = new Date().toDateString();
+
+            container.innerHTML = Object.values(days).slice(0, 5).map((day, i) => {
+                const temps = day.hours.map(h => h.debiased.temperature);
+                const maxTemp = Math.round(Math.max(...temps));
+                const minTemp = Math.round(Math.min(...temps));
+                const precip = day.hours.reduce((sum, h) => sum + (h.debiased.rain || 0), 0);
+                const avgWind = day.hours.reduce((sum, h) => sum + h.debiased.wind_speed, 0) / day.hours.length;
+
+                // Get midday weather code for icon
+                const middayHour = day.hours.find(h => new Date(h.time).getHours() === 12) || day.hours[Math.floor(day.hours.length/2)];
+                const weatherCode = middayHour?.raw?.weather_code || 0;
+                const icon = getWeatherIcon(weatherCode, true);
+
+                const isToday = day.date.toDateString() === today;
+                const dayName = isToday ? 'Today' : dayNames[day.date.getDay()];
+
+                return `
+                    <div class="day-card ${isToday ? 'today' : ''}">
+                        <div class="day-name">${dayName}</div>
+                        <i class="wi ${icon} day-icon"></i>
+                        <div class="day-temps">
+                            <span class="day-temp-max">${maxTemp}°</span>
+                            <span class="day-temp-min">${minTemp}°</span>
+                        </div>
+                        ${precip > 0.1 ? `<div class="day-precip"><i class="wi wi-raindrop"></i>${precip.toFixed(1)}mm</div>` : '<div class="day-precip">-</div>'}
+                        <div class="day-wind"><i class="wi wi-strong-wind"></i> ${Math.round(avgWind)} km/h</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCharts(hourly) {
+            const step = 2;
+            const sampled = hourly.filter((_, i) => i % step === 0);
+
+            const labels = sampled.map(h => {
                 const d = new Date(h.time);
                 return d.toLocaleDateString('en-US', { weekday: 'short', hour: '2-digit' });
             });
 
-            // Sample every 3 hours for cleaner chart
-            const step = 3;
-            const sampledLabels = labels.filter((_, i) => i % step === 0);
-            const rawTemps = hourly.filter((_, i) => i % step === 0).map(h => h.raw.temperature);
-            const debiasedTemps = hourly.filter((_, i) => i % step === 0).map(h => h.debiased.temperature);
-
+            // Temperature chart
+            const ctxTemp = document.getElementById('tempChart').getContext('2d');
             if (tempChart) tempChart.destroy();
 
-            tempChart = new Chart(ctx, {
+            tempChart = new Chart(ctxTemp, {
                 type: 'line',
                 data: {
-                    labels: sampledLabels,
+                    labels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: sampled.map(h => h.debiased.temperature),
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: true, grid: { display: false } },
+                        y: { display: true, grid: { color: '#f0f0f0' } }
+                    }
+                }
+            });
+
+            // Precip + Wind chart
+            const ctxPrecipWind = document.getElementById('precipWindChart').getContext('2d');
+            if (precipWindChart) precipWindChart.destroy();
+
+            precipWindChart = new Chart(ctxPrecipWind, {
+                type: 'bar',
+                data: {
+                    labels,
                     datasets: [
                         {
-                            label: 'Raw Forecast',
-                            data: rawTemps,
-                            borderColor: '#ccc',
-                            backgroundColor: 'rgba(200,200,200,0.1)',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            tension: 0.3,
-                            pointRadius: 0
+                            label: 'Precip (mm)',
+                            data: sampled.map(h => h.debiased.rain),
+                            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                            borderRadius: 3,
+                            yAxisID: 'y'
                         },
                         {
-                            label: 'Debiased',
-                            data: debiasedTemps,
-                            borderColor: '#667eea',
-                            backgroundColor: 'rgba(102,126,234,0.1)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            fill: true,
-                            pointRadius: 0
+                            label: 'Wind (km/h)',
+                            data: sampled.map(h => h.debiased.wind_speed),
+                            type: 'line',
+                            borderColor: '#27ae60',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            yAxisID: 'y1'
                         }
                     ]
                 },
@@ -200,48 +489,60 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'top' }
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { boxWidth: 12, font: { size: 11 } }
+                        }
                     },
                     scales: {
+                        x: { display: true, grid: { display: false } },
                         y: {
-                            title: { display: true, text: 'Temperature (°C)' }
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'mm', font: { size: 10 } },
+                            grid: { color: '#f0f0f0' },
+                            min: 0
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: 'km/h', font: { size: 10 } },
+                            grid: { display: false },
+                            min: 0
                         }
                     }
                 }
             });
         }
 
-        function renderTable(hourly) {
-            const tbody = document.querySelector('#forecastTable tbody');
-
-            // Show every 3 hours
-            const filtered = hourly.filter((_, i) => i % 3 === 0);
+        function renderHourlyTable(hourly) {
+            const tbody = document.querySelector('#hourlyTable tbody');
+            const step = 3;
+            const filtered = hourly.filter((_, i) => i % step === 0);
 
             tbody.innerHTML = filtered.map(h => {
                 const d = new Date(h.time);
                 const timeStr = d.toLocaleDateString('en-US', {
-                    weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    weekday: 'short', hour: '2-digit', minute: '2-digit'
                 });
-
-                const tempDiff = h.debiased.temperature - h.raw.temperature;
-                const diffClass = tempDiff > 0 ? 'diff-pos' : 'diff-neg';
-                const diffStr = tempDiff > 0 ? `+${tempDiff.toFixed(1)}` : tempDiff.toFixed(1);
 
                 return `
                     <tr>
                         <td>${timeStr}</td>
-                        <td class="temp-raw">${h.raw.temperature?.toFixed(1) ?? '-'}°C</td>
-                        <td class="temp-debiased">${h.debiased.temperature}°C <small class="${diffClass}">(${diffStr})</small></td>
-                        <td>${h.debiased.humidity?.toFixed(0) ?? '-'}%</td>
-                        <td>${h.debiased.wind_speed?.toFixed(1) ?? '-'} km/h</td>
-                        <td>${h.debiased.gust_speed?.toFixed(1) ?? '-'} km/h</td>
-                        <td>${h.debiased.rain > 0.01 ? h.debiased.rain.toFixed(1) + ' mm' : '-'}</td>
+                        <td class="temp-cell">${h.debiased.temperature.toFixed(1)}°C</td>
+                        <td class="humid-cell">${Math.round(h.debiased.humidity)}%</td>
+                        <td class="wind-cell">${h.debiased.wind_speed.toFixed(0)} km/h</td>
+                        <td>${h.debiased.gust_speed.toFixed(0)} km/h</td>
+                        <td class="precip-cell">${h.debiased.rain > 0.01 ? h.debiased.rain.toFixed(1) + ' mm' : '-'}</td>
                     </tr>
                 `;
             }).join('');
         }
 
         loadForecast();
+        // Refresh every 30 minutes
+        setInterval(loadForecast, 30 * 60 * 1000);
     </script>
 </body>
 </html>

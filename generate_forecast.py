@@ -150,6 +150,7 @@ def generate_output(times, features, predictions):
                 "wind_gusts": features["fc_wind_gusts_10m"][i],
                 "cloud_cover": features["fc_cloud_cover"][i],
                 "pressure": features["fc_pressure_msl"][i],
+                "weather_code": features["fc_weather_code"][i],
             },
             "debiased": {
                 "temperature": round(predictions["temperature"][i], 1),
