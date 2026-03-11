@@ -1,0 +1,26 @@
+# Data files (too large for git)
+station_data_combined.csv
+station_hourly.csv
+forecast_data.csv
+forecast_data_v2.csv
+training_data.csv
+training_data_v2.csv
+
+# Extracted data
+extracted/
+
+# Original zips
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+debiased_forecast.csv

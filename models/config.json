@@ -1,0 +1,36 @@
+{
+  "features": [
+    "fc_temperature_2m",
+    "fc_relative_humidity_2m",
+    "fc_dew_point_2m",
+    "fc_precipitation",
+    "fc_rain",
+    "fc_pressure_msl",
+    "fc_surface_pressure",
+    "fc_wind_speed_10m",
+    "fc_wind_direction_10m",
+    "fc_wind_gusts_10m",
+    "fc_cloud_cover",
+    "fc_shortwave_radiation",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "targets": [
+    "temperature",
+    "humidity",
+    "rain",
+    "wind_speed",
+    "gust_speed"
+  ],
+  "location": {
+    "lat": 46.021245,
+    "lon": 8.239861,
+    "name": "Morlongo"
+  },
+  "training_period": {
+    "start": "2025-07-10 00:00:00",
+    "end": "2026-03-10 23:00:00"
+  }
+}
