@@ -8,29 +8,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
     <style>
+        /* Lipari color palette (scico) */
+        :root {
+            --lipari-1: #1A1530;  /* deep purple */
+            --lipari-2: #2B3A67;  /* dark blue */
+            --lipari-3: #3E6B89;  /* steel blue */
+            --lipari-4: #4E9B8F;  /* teal */
+            --lipari-5: #7BBF7E;  /* green */
+            --lipari-6: #B8D986;  /* light green */
+            --lipari-7: #E8D9A0;  /* cream */
+            --lipari-8: #F5B563;  /* orange */
+            --lipari-9: #E8704D;  /* coral */
+            --lipari-10: #C93D4A; /* red */
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, #e8f4f8 0%, #f5f7fa 100%);
-            color: #333;
+            background: linear-gradient(180deg, #f0f4f7 0%, #e8ecf0 100%);
+            color: var(--lipari-1);
             line-height: 1.6;
             min-height: 100vh;
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
 
         header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, var(--lipari-1) 0%, var(--lipari-2) 100%);
             color: white;
             padding: 20px;
             text-align: center;
             border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(26, 21, 48, 0.3);
         }
         header h1 { font-size: 1.5em; font-weight: 600; }
         header p { opacity: 0.85; font-size: 0.85em; margin-top: 5px; }
         .update-time { font-size: 0.75em; opacity: 0.7; margin-top: 8px; }
 
-        /* Current Weather - Now with Observed */
+        /* Current Weather Cards */
         .current-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -41,10 +55,10 @@
             background: white;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(26, 21, 48, 0.08);
         }
         .current-card.observed {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, var(--lipari-4) 0%, var(--lipari-5) 100%);
             color: white;
         }
         .current-card.observed .card-label { color: rgba(255,255,255,0.9); }
@@ -57,7 +71,7 @@
             font-size: 0.75em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #888;
+            color: var(--lipari-3);
             margin-bottom: 10px;
         }
         .current-main {
@@ -66,28 +80,28 @@
             gap: 15px;
             margin-bottom: 15px;
         }
-        .current-main .wi { font-size: 3em; color: #2a5298; }
+        .current-main .wi { font-size: 3em; color: var(--lipari-3); }
         .current-temp { font-size: 3em; font-weight: 300; }
         .current-temp sup { font-size: 0.4em; vertical-align: top; }
         .current-details {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 8px;
         }
         .detail-item {
-            padding: 10px;
-            background: #f8fafc;
+            padding: 10px 6px;
+            background: #f5f7fa;
             border-radius: 10px;
             text-align: center;
         }
-        .detail-item .wi { font-size: 1.2em; color: #2a5298; margin-bottom: 3px; }
-        .detail-value { font-size: 1.1em; font-weight: 600; color: #1e3c72; }
-        .detail-label { font-size: 0.7em; color: #888; text-transform: uppercase; }
+        .detail-item .wi { font-size: 1.1em; color: var(--lipari-3); margin-bottom: 3px; }
+        .detail-value { font-size: 1em; font-weight: 600; color: var(--lipari-1); }
+        .detail-label { font-size: 0.65em; color: var(--lipari-3); text-transform: uppercase; }
 
         .no-obs {
             text-align: center;
             padding: 40px 20px;
-            color: #888;
+            color: rgba(255,255,255,0.8);
         }
         .no-obs .wi { font-size: 2em; margin-bottom: 10px; opacity: 0.5; }
 
@@ -103,23 +117,25 @@
             border-radius: 16px;
             padding: 15px 10px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
             transition: transform 0.2s;
         }
         .day-card:hover { transform: translateY(-3px); }
         .day-card.today {
-            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            background: linear-gradient(135deg, var(--lipari-2) 0%, var(--lipari-3) 100%);
             color: white;
         }
         .day-card.today .day-icon { color: white; }
         .day-card.today .day-temp-min { color: rgba(255,255,255,0.7); }
+        .day-card.today .day-precip { color: var(--lipari-7); }
+        .day-card.today .day-wind { color: rgba(255,255,255,0.7); }
         .day-name { font-weight: 600; font-size: 0.85em; margin-bottom: 8px; }
-        .day-icon { font-size: 2em; color: #2a5298; margin: 8px 0; }
+        .day-icon { font-size: 2em; color: var(--lipari-3); margin: 8px 0; }
         .day-temps { margin: 8px 0; }
         .day-temp-max { font-size: 1.2em; font-weight: 600; }
-        .day-temp-min { font-size: 0.9em; color: #888; margin-left: 5px; }
-        .day-precip { font-size: 0.75em; color: #3498db; margin-top: 5px; }
-        .day-wind { font-size: 0.7em; color: #888; margin-top: 3px; }
+        .day-temp-min { font-size: 0.9em; color: var(--lipari-3); margin-left: 5px; }
+        .day-precip { font-size: 0.75em; color: var(--lipari-3); margin-top: 5px; }
+        .day-wind { font-size: 0.7em; color: var(--lipari-3); margin-top: 3px; }
 
         /* Charts */
         .charts-section {
@@ -132,18 +148,18 @@
             background: white;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
         }
         .chart-title {
             font-size: 0.9em;
             font-weight: 600;
-            color: #555;
+            color: var(--lipari-2);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .chart-title .wi { color: #2a5298; }
+        .chart-title .wi { color: var(--lipari-3); }
         .chart-container { height: 200px; }
 
         /* Detailed Table */
@@ -152,30 +168,30 @@
             border-radius: 16px;
             padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
         }
-        .details-title { font-size: 1em; font-weight: 600; color: #333; margin-bottom: 15px; }
+        .details-title { font-size: 1em; font-weight: 600; color: var(--lipari-1); margin-bottom: 15px; }
         .hourly-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 600px; }
         th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #eee; }
-        th { background: #f8fafc; font-weight: 600; color: #555; position: sticky; top: 0; }
+        th { background: #f8fafc; font-weight: 600; color: var(--lipari-2); position: sticky; top: 0; }
         tr:hover { background: #f8fafc; }
-        .temp-cell { color: #e74c3c; font-weight: 600; }
-        .humid-cell { color: #3498db; }
-        .wind-cell { color: #27ae60; }
-        .precip-cell { color: #9b59b6; }
+        .temp-cell { color: var(--lipari-9); font-weight: 600; }
+        .humid-cell { color: var(--lipari-3); }
+        .wind-cell { color: var(--lipari-5); }
+        .precip-cell { color: var(--lipari-4); }
 
         footer {
             text-align: center;
             padding: 20px;
-            color: #888;
+            color: var(--lipari-3);
             font-size: 0.8em;
         }
-        footer a { color: #2a5298; text-decoration: none; }
+        footer a { color: var(--lipari-2); text-decoration: none; }
 
         @media (max-width: 700px) {
             .current-section { grid-template-columns: 1fr; }
-            .current-details { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .current-details { grid-template-columns: repeat(3, 1fr); }
             .daily-forecast { grid-template-columns: repeat(5, 1fr); gap: 6px; }
             .day-card { padding: 10px 5px; }
             .day-icon { font-size: 1.5em; }
@@ -205,22 +221,8 @@
                         <i class="wi wi-thermometer"></i>
                         <div class="current-temp" id="obsTemp">--<sup>°C</sup></div>
                     </div>
-                    <div class="current-details">
-                        <div class="detail-item">
-                            <i class="wi wi-humidity"></i>
-                            <div class="detail-value" id="obsHumidity">--%</div>
-                            <div class="detail-label">Humidity</div>
-                        </div>
-                        <div class="detail-item">
-                            <i class="wi wi-barometer"></i>
-                            <div class="detail-value" id="obsPressure">-- hPa</div>
-                            <div class="detail-label">Pressure</div>
-                        </div>
-                        <div class="detail-item">
-                            <i class="wi wi-time-3"></i>
-                            <div class="detail-value" id="obsTime">--:--</div>
-                            <div class="detail-label">Updated</div>
-                        </div>
+                    <div class="current-details" id="obsDetails">
+                        <!-- Filled dynamically -->
                     </div>
                 </div>
             </div>
@@ -239,13 +241,13 @@
                     </div>
                     <div class="detail-item">
                         <i class="wi wi-strong-wind"></i>
-                        <div class="detail-value" id="fcWind">-- km/h</div>
+                        <div class="detail-value" id="fcWind">--</div>
                         <div class="detail-label">Wind</div>
                     </div>
                     <div class="detail-item">
                         <i class="wi wi-raindrop"></i>
-                        <div class="detail-value" id="fcPrecip">-- mm</div>
-                        <div class="detail-label">24h Precip</div>
+                        <div class="detail-value" id="fcPrecip">--</div>
+                        <div class="detail-label">24h Rain</div>
                     </div>
                 </div>
             </div>
@@ -293,6 +295,20 @@
     </footer>
 
     <script>
+        // Lipari palette for charts
+        const lipari = {
+            purple: '#1A1530',
+            darkBlue: '#2B3A67',
+            steelBlue: '#3E6B89',
+            teal: '#4E9B8F',
+            green: '#7BBF7E',
+            lightGreen: '#B8D986',
+            cream: '#E8D9A0',
+            orange: '#F5B563',
+            coral: '#E8704D',
+            red: '#C93D4A'
+        };
+
         let tempChart = null;
         let precipWindChart = null;
         let forecastData = null;
@@ -366,17 +382,86 @@
             const current = observationsData.current;
             const outdoor = current.outdoor || {};
             const indoor = current.indoor || {};
+            const wind = current.wind || {};
+            const rain = current.rain || {};
 
             const temp = outdoor.temperature ?? indoor.temperature;
-            const humidity = outdoor.humidity ?? indoor.humidity;
-            const pressure = indoor.pressure;
-
             document.getElementById('obsTemp').innerHTML = temp != null ? `${temp.toFixed(1)}<sup>°C</sup>` : '--<sup>°C</sup>';
-            document.getElementById('obsHumidity').textContent = humidity != null ? `${Math.round(humidity)}%` : '--%';
-            document.getElementById('obsPressure').textContent = pressure != null ? `${Math.round(pressure)} hPa` : '-- hPa';
 
+            // Build details dynamically based on available data
+            let detailsHTML = '';
+
+            // Humidity
+            const humidity = outdoor.humidity ?? indoor.humidity;
+            if (humidity != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-humidity"></i>
+                        <div class="detail-value">${Math.round(humidity)}%</div>
+                        <div class="detail-label">Humidity</div>
+                    </div>`;
+            }
+
+            // Pressure
+            if (indoor.pressure != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-barometer"></i>
+                        <div class="detail-value">${Math.round(indoor.pressure)}</div>
+                        <div class="detail-label">hPa</div>
+                    </div>`;
+            }
+
+            // Wind
+            if (wind.wind_strength != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-strong-wind"></i>
+                        <div class="detail-value">${Math.round(wind.wind_strength)}</div>
+                        <div class="detail-label">km/h</div>
+                    </div>`;
+            }
+
+            // Gusts
+            if (wind.gust_strength != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-wind-beaufort-6"></i>
+                        <div class="detail-value">${Math.round(wind.gust_strength)}</div>
+                        <div class="detail-label">Gusts</div>
+                    </div>`;
+            }
+
+            // Rain 1h
+            if (rain.rain_1h != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-raindrop"></i>
+                        <div class="detail-value">${rain.rain_1h.toFixed(1)}</div>
+                        <div class="detail-label">mm/1h</div>
+                    </div>`;
+            }
+
+            // Rain 24h
+            if (rain.rain_24h != null) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <i class="wi wi-rain"></i>
+                        <div class="detail-value">${rain.rain_24h.toFixed(1)}</div>
+                        <div class="detail-label">mm/24h</div>
+                    </div>`;
+            }
+
+            // Last update time
             const obsTime = new Date(current.time);
-            document.getElementById('obsTime').textContent = obsTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+            detailsHTML += `
+                <div class="detail-item">
+                    <i class="wi wi-time-3"></i>
+                    <div class="detail-value">${obsTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div class="detail-label">Updated</div>
+                </div>`;
+
+            document.getElementById('obsDetails').innerHTML = detailsHTML;
         }
 
         function renderCurrentForecast() {
@@ -460,8 +545,8 @@
             const datasets = [{
                 label: 'Forecast',
                 data: fcTimes.map((t, i) => ({ x: t, y: fcTemps[i] })),
-                borderColor: '#e74c3c',
-                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                borderColor: lipari.coral,
+                backgroundColor: lipari.coral + '20',
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true,
@@ -472,8 +557,8 @@
                 datasets.unshift({
                     label: 'Observed',
                     data: obsTimes.map((t, i) => ({ x: t, y: obsTemps[i] })),
-                    borderColor: '#11998e',
-                    backgroundColor: 'rgba(17, 153, 142, 0.2)',
+                    borderColor: lipari.teal,
+                    backgroundColor: lipari.teal + '30',
                     borderWidth: 2,
                     tension: 0.4,
                     fill: true,
@@ -518,7 +603,7 @@
                         {
                             label: 'Precip (mm)',
                             data: fcSampled.map(h => h.debiased.rain),
-                            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                            backgroundColor: lipari.steelBlue + 'CC',
                             borderRadius: 3,
                             yAxisID: 'y'
                         },
@@ -526,7 +611,7 @@
                             label: 'Wind (km/h)',
                             data: fcSampled.map(h => h.debiased.wind_speed),
                             type: 'line',
-                            borderColor: '#27ae60',
+                            borderColor: lipari.green,
                             borderWidth: 2,
                             tension: 0.4,
                             pointRadius: 0,
