@@ -8,37 +8,44 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
     <style>
-        /* Lipari color palette (scico) */
+        /* Actual Lipari colorscale from scico/crameri */
         :root {
-            --lipari-1: #1A1530;  /* deep purple */
-            --lipari-2: #2B3A67;  /* dark blue */
-            --lipari-3: #3E6B89;  /* steel blue */
-            --lipari-4: #4E9B8F;  /* teal */
-            --lipari-5: #7BBF7E;  /* green */
-            --lipari-6: #B8D986;  /* light green */
-            --lipari-7: #E8D9A0;  /* cream */
-            --lipari-8: #F5B563;  /* orange */
-            --lipari-9: #E8704D;  /* coral */
-            --lipari-10: #C93D4A; /* red */
+            --lipari-0: #1B1145;   /* deep purple-blue */
+            --lipari-1: #2D2B6B;   /* purple-blue */
+            --lipari-2: #3E4A8A;   /* blue */
+            --lipari-3: #5369A5;   /* medium blue */
+            --lipari-4: #6E8ABE;   /* light blue */
+            --lipari-5: #8FACD4;   /* lighter blue */
+            --lipari-6: #B5CEE6;   /* very light blue */
+            --lipari-7: #DDE9F2;   /* near white blue */
+            --lipari-8: #F9F5EE;   /* cream/white - middle */
+            --lipari-9: #F5E6D0;   /* light tan */
+            --lipari-10: #EDD3AF;  /* tan */
+            --lipari-11: #E4BC8A;  /* orange-tan */
+            --lipari-12: #D9A164;  /* orange */
+            --lipari-13: #CB8343;  /* brown-orange */
+            --lipari-14: #B96628;  /* brown */
+            --lipari-15: #A24B14;  /* dark brown */
+            --lipari-16: #872E08;  /* deep brown */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, #f0f4f7 0%, #e8ecf0 100%);
-            color: var(--lipari-1);
+            background: var(--lipari-7);
+            color: var(--lipari-0);
             line-height: 1.6;
             min-height: 100vh;
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
 
         header {
-            background: linear-gradient(135deg, var(--lipari-1) 0%, var(--lipari-2) 100%);
+            background: linear-gradient(135deg, var(--lipari-0) 0%, var(--lipari-2) 100%);
             color: white;
             padding: 20px;
             text-align: center;
             border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 15px rgba(26, 21, 48, 0.3);
+            box-shadow: 0 4px 15px rgba(27, 17, 69, 0.3);
         }
         header h1 { font-size: 1.5em; font-weight: 600; }
         header p { opacity: 0.85; font-size: 0.85em; margin-top: 5px; }
@@ -55,10 +62,10 @@
             background: white;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(26, 21, 48, 0.08);
+            box-shadow: 0 4px 20px rgba(27, 17, 69, 0.08);
         }
         .current-card.observed {
-            background: linear-gradient(135deg, var(--lipari-4) 0%, var(--lipari-5) 100%);
+            background: linear-gradient(135deg, var(--lipari-13) 0%, var(--lipari-11) 100%);
             color: white;
         }
         .current-card.observed .card-label { color: rgba(255,255,255,0.9); }
@@ -90,12 +97,12 @@
         }
         .detail-item {
             padding: 10px 6px;
-            background: #f5f7fa;
+            background: var(--lipari-7);
             border-radius: 10px;
             text-align: center;
         }
         .detail-item .wi { font-size: 1.1em; color: var(--lipari-3); margin-bottom: 3px; }
-        .detail-value { font-size: 1em; font-weight: 600; color: var(--lipari-1); }
+        .detail-value { font-size: 1em; font-weight: 600; color: var(--lipari-0); }
         .detail-label { font-size: 0.65em; color: var(--lipari-3); text-transform: uppercase; }
 
         .no-obs {
@@ -117,25 +124,25 @@
             border-radius: 16px;
             padding: 15px 10px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
+            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
             transition: transform 0.2s;
         }
         .day-card:hover { transform: translateY(-3px); }
         .day-card.today {
-            background: linear-gradient(135deg, var(--lipari-2) 0%, var(--lipari-3) 100%);
+            background: linear-gradient(135deg, var(--lipari-1) 0%, var(--lipari-3) 100%);
             color: white;
         }
         .day-card.today .day-icon { color: white; }
         .day-card.today .day-temp-min { color: rgba(255,255,255,0.7); }
-        .day-card.today .day-precip { color: var(--lipari-7); }
+        .day-card.today .day-precip { color: var(--lipari-9); }
         .day-card.today .day-wind { color: rgba(255,255,255,0.7); }
         .day-name { font-weight: 600; font-size: 0.85em; margin-bottom: 8px; }
         .day-icon { font-size: 2em; color: var(--lipari-3); margin: 8px 0; }
         .day-temps { margin: 8px 0; }
         .day-temp-max { font-size: 1.2em; font-weight: 600; }
-        .day-temp-min { font-size: 0.9em; color: var(--lipari-3); margin-left: 5px; }
+        .day-temp-min { font-size: 0.9em; color: var(--lipari-4); margin-left: 5px; }
         .day-precip { font-size: 0.75em; color: var(--lipari-3); margin-top: 5px; }
-        .day-wind { font-size: 0.7em; color: var(--lipari-3); margin-top: 3px; }
+        .day-wind { font-size: 0.7em; color: var(--lipari-4); margin-top: 3px; }
 
         /* Charts */
         .charts-section {
@@ -148,12 +155,12 @@
             background: white;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
+            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
         }
         .chart-title {
             font-size: 0.9em;
             font-weight: 600;
-            color: var(--lipari-2);
+            color: var(--lipari-1);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -168,23 +175,23 @@
             border-radius: 16px;
             padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(26, 21, 48, 0.06);
+            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
         }
-        .details-title { font-size: 1em; font-weight: 600; color: var(--lipari-1); margin-bottom: 15px; }
+        .details-title { font-size: 1em; font-weight: 600; color: var(--lipari-0); margin-bottom: 15px; }
         .hourly-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 600px; }
-        th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #eee; }
-        th { background: #f8fafc; font-weight: 600; color: var(--lipari-2); position: sticky; top: 0; }
-        tr:hover { background: #f8fafc; }
-        .temp-cell { color: var(--lipari-9); font-weight: 600; }
+        th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--lipari-7); }
+        th { background: var(--lipari-7); font-weight: 600; color: var(--lipari-1); position: sticky; top: 0; }
+        tr:hover { background: var(--lipari-8); }
+        .temp-cell { color: var(--lipari-14); font-weight: 600; }
         .humid-cell { color: var(--lipari-3); }
-        .wind-cell { color: var(--lipari-5); }
-        .precip-cell { color: var(--lipari-4); }
+        .wind-cell { color: var(--lipari-12); }
+        .precip-cell { color: var(--lipari-2); }
 
         footer {
             text-align: center;
             padding: 20px;
-            color: var(--lipari-3);
+            color: var(--lipari-4);
             font-size: 0.8em;
         }
         footer a { color: var(--lipari-2); text-decoration: none; }
@@ -295,18 +302,25 @@
     </footer>
 
     <script>
-        // Lipari palette for charts
+        // Actual Lipari colorscale from scico/crameri
         const lipari = {
-            purple: '#1A1530',
-            darkBlue: '#2B3A67',
-            steelBlue: '#3E6B89',
-            teal: '#4E9B8F',
-            green: '#7BBF7E',
-            lightGreen: '#B8D986',
-            cream: '#E8D9A0',
-            orange: '#F5B563',
-            coral: '#E8704D',
-            red: '#C93D4A'
+            0: '#1B1145',   // deep purple-blue
+            1: '#2D2B6B',   // purple-blue
+            2: '#3E4A8A',   // blue
+            3: '#5369A5',   // medium blue
+            4: '#6E8ABE',   // light blue
+            5: '#8FACD4',   // lighter blue
+            6: '#B5CEE6',   // very light blue
+            7: '#DDE9F2',   // near white blue
+            8: '#F9F5EE',   // cream/white
+            9: '#F5E6D0',   // light tan
+            10: '#EDD3AF',  // tan
+            11: '#E4BC8A',  // orange-tan
+            12: '#D9A164',  // orange
+            13: '#CB8343',  // brown-orange
+            14: '#B96628',  // brown
+            15: '#A24B14',  // dark brown
+            16: '#872E08'   // deep brown
         };
 
         let tempChart = null;
@@ -388,10 +402,8 @@
             const temp = outdoor.temperature ?? indoor.temperature;
             document.getElementById('obsTemp').innerHTML = temp != null ? `${temp.toFixed(1)}<sup>°C</sup>` : '--<sup>°C</sup>';
 
-            // Build details dynamically based on available data
             let detailsHTML = '';
 
-            // Humidity
             const humidity = outdoor.humidity ?? indoor.humidity;
             if (humidity != null) {
                 detailsHTML += `
@@ -402,7 +414,6 @@
                     </div>`;
             }
 
-            // Pressure
             if (indoor.pressure != null) {
                 detailsHTML += `
                     <div class="detail-item">
@@ -412,7 +423,6 @@
                     </div>`;
             }
 
-            // Wind
             if (wind.wind_strength != null) {
                 detailsHTML += `
                     <div class="detail-item">
@@ -422,7 +432,6 @@
                     </div>`;
             }
 
-            // Gusts
             if (wind.gust_strength != null) {
                 detailsHTML += `
                     <div class="detail-item">
@@ -432,7 +441,6 @@
                     </div>`;
             }
 
-            // Rain 1h
             if (rain.rain_1h != null) {
                 detailsHTML += `
                     <div class="detail-item">
@@ -442,7 +450,6 @@
                     </div>`;
             }
 
-            // Rain 24h
             if (rain.rain_24h != null) {
                 detailsHTML += `
                     <div class="detail-item">
@@ -452,7 +459,6 @@
                     </div>`;
             }
 
-            // Last update time
             const obsTime = new Date(current.time);
             detailsHTML += `
                 <div class="detail-item">
@@ -522,13 +528,11 @@
         }
 
         function renderCharts() {
-            // Prepare forecast data
             const fcStep = 2;
             const fcSampled = forecastData.hourly.filter((_, i) => i % fcStep === 0);
             const fcTimes = fcSampled.map(h => new Date(h.time));
             const fcTemps = fcSampled.map(h => h.debiased.temperature);
 
-            // Prepare observation data
             let obsTimes = [];
             let obsTemps = [];
 
@@ -538,15 +542,14 @@
                 obsTemps = obs.map(o => o.outdoor?.temperature ?? o.indoor?.temperature ?? null);
             }
 
-            // Temperature chart
             const ctxTemp = document.getElementById('tempChart').getContext('2d');
             if (tempChart) tempChart.destroy();
 
             const datasets = [{
                 label: 'Forecast',
                 data: fcTimes.map((t, i) => ({ x: t, y: fcTemps[i] })),
-                borderColor: lipari.coral,
-                backgroundColor: lipari.coral + '20',
+                borderColor: lipari[3],  // medium blue
+                backgroundColor: lipari[3] + '20',
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true,
@@ -557,8 +560,8 @@
                 datasets.unshift({
                     label: 'Observed',
                     data: obsTimes.map((t, i) => ({ x: t, y: obsTemps[i] })),
-                    borderColor: lipari.teal,
-                    backgroundColor: lipari.teal + '30',
+                    borderColor: lipari[13],  // brown-orange
+                    backgroundColor: lipari[13] + '30',
                     borderWidth: 2,
                     tension: 0.4,
                     fill: true,
@@ -581,12 +584,11 @@
                             time: { unit: 'day', displayFormats: { day: 'EEE' } },
                             grid: { display: false }
                         },
-                        y: { grid: { color: '#f0f0f0' } }
+                        y: { grid: { color: lipari[7] } }
                     }
                 }
             });
 
-            // Precip + Wind chart
             const ctxPW = document.getElementById('precipWindChart').getContext('2d');
             if (precipWindChart) precipWindChart.destroy();
 
@@ -603,7 +605,7 @@
                         {
                             label: 'Precip (mm)',
                             data: fcSampled.map(h => h.debiased.rain),
-                            backgroundColor: lipari.steelBlue + 'CC',
+                            backgroundColor: lipari[2] + 'CC',  // blue
                             borderRadius: 3,
                             yAxisID: 'y'
                         },
@@ -611,7 +613,7 @@
                             label: 'Wind (km/h)',
                             data: fcSampled.map(h => h.debiased.wind_speed),
                             type: 'line',
-                            borderColor: lipari.green,
+                            borderColor: lipari[12],  // orange
                             borderWidth: 2,
                             tension: 0.4,
                             pointRadius: 0,
@@ -627,7 +629,7 @@
                     },
                     scales: {
                         x: { grid: { display: false } },
-                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 10 } }, grid: { color: '#f0f0f0' }, min: 0 },
+                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 10 } }, grid: { color: lipari[7] }, min: 0 },
                         y1: { position: 'right', title: { display: true, text: 'km/h', font: { size: 10 } }, grid: { display: false }, min: 0 }
                     }
                 }
