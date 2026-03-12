@@ -1,9 +1,9 @@
-name: Update Forecast
+name: Update Forecast & Observations
 
 on:
   schedule:
-    # Run at 05:00 and 17:00 UTC (06:00 and 18:00 CET)
-    - cron: '0 5,17 * * *'
+    # Run every hour at minute 5
+    - cron: '5 * * * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -23,13 +23,22 @@ jobs:
         run: |
           pip install requests xgboost numpy
 
-      - name: Generate forecast
+      - name: Fetch Netatmo observations
+        if: ${{ env.NETATMO_CLIENT_ID != '' }}
+        env:
+          NETATMO_CLIENT_ID: ${{ secrets.NETATMO_CLIENT_ID }}
+          NETATMO_CLIENT_SECRET: ${{ secrets.NETATMO_CLIENT_SECRET }}
+          NETATMO_REFRESH_TOKEN: ${{ secrets.NETATMO_REFRESH_TOKEN }}
+        run: python fetch_observations.py
+        continue-on-error: true  # Don't fail if Netatmo is down
+
+      - name: Generate debiased forecast
         run: python generate_forecast.py
 
       - name: Commit and push
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add docs/forecast.json
-          git diff --staged --quiet || git commit -m "Update forecast $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git add docs/forecast.json docs/observations.json
+          git diff --staged --quiet || git commit -m "Update forecast & observations $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
