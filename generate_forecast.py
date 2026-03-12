@@ -26,7 +26,7 @@ OUTPUT_DIR = Path(__file__).parent / "docs"
 # All forecast variables (must match training)
 FORECAST_VARS = [
     "temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature",
-    "precipitation", "rain", "snowfall", "snow_depth", "weather_code",
+    "precipitation", "precipitation_probability", "rain", "snowfall", "snow_depth", "weather_code",
     "pressure_msl", "surface_pressure", "cloud_cover", "cloud_cover_low",
     "cloud_cover_mid", "cloud_cover_high", "et0_fao_evapotranspiration",
     "vapour_pressure_deficit", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m",
@@ -148,15 +148,19 @@ def generate_output(times, features, predictions):
             "time": t.isoformat(),
             "raw": {
                 "temperature": features["fc_temperature_2m"][i],
+                "apparent_temperature": features["fc_apparent_temperature"][i],
                 "humidity": features["fc_relative_humidity_2m"][i],
                 "precipitation": features["fc_precipitation"][i],
+                "precipitation_probability": features["fc_precipitation_probability"][i],
                 "wind_speed": features["fc_wind_speed_10m"][i],
                 "wind_gusts": features["fc_wind_gusts_10m"][i],
+                "wind_direction": features["fc_wind_direction_10m"][i],
                 "cloud_cover": features["fc_cloud_cover"][i],
                 "pressure": features["fc_pressure_msl"][i],
                 "weather_code": features["fc_weather_code"][i],
                 "vpd": features["fc_vapour_pressure_deficit"][i],
                 "et0": features["fc_et0_fao_evapotranspiration"][i],
+                "is_day": features["fc_is_day"][i],
             },
             "debiased": {
                 "temperature": round(predictions["temperature"][i], 1),

@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1B1145">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <title>Morlongo Weather</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
@@ -10,32 +15,51 @@
     <style>
         /* Actual Lipari colorscale from scico/crameri */
         :root {
-            --lipari-0: #1B1145;   /* deep purple-blue */
-            --lipari-1: #2D2B6B;   /* purple-blue */
-            --lipari-2: #3E4A8A;   /* blue */
-            --lipari-3: #5369A5;   /* medium blue */
-            --lipari-4: #6E8ABE;   /* light blue */
-            --lipari-5: #8FACD4;   /* lighter blue */
-            --lipari-6: #B5CEE6;   /* very light blue */
-            --lipari-7: #DDE9F2;   /* near white blue */
-            --lipari-8: #F9F5EE;   /* cream/white - middle */
-            --lipari-9: #F5E6D0;   /* light tan */
-            --lipari-10: #EDD3AF;  /* tan */
-            --lipari-11: #E4BC8A;  /* orange-tan */
-            --lipari-12: #D9A164;  /* orange */
-            --lipari-13: #CB8343;  /* brown-orange */
-            --lipari-14: #B96628;  /* brown */
-            --lipari-15: #A24B14;  /* dark brown */
-            --lipari-16: #872E08;  /* deep brown */
+            --lipari-0: #1B1145;
+            --lipari-1: #2D2B6B;
+            --lipari-2: #3E4A8A;
+            --lipari-3: #5369A5;
+            --lipari-4: #6E8ABE;
+            --lipari-5: #8FACD4;
+            --lipari-6: #B5CEE6;
+            --lipari-7: #DDE9F2;
+            --lipari-8: #F9F5EE;
+            --lipari-9: #F5E6D0;
+            --lipari-10: #EDD3AF;
+            --lipari-11: #E4BC8A;
+            --lipari-12: #D9A164;
+            --lipari-13: #CB8343;
+            --lipari-14: #B96628;
+            --lipari-15: #A24B14;
+            --lipari-16: #872E08;
+
+            --bg-primary: var(--lipari-7);
+            --bg-card: white;
+            --text-primary: var(--lipari-0);
+            --text-secondary: var(--lipari-3);
+            --text-muted: var(--lipari-4);
+            --border-light: var(--lipari-7);
+            --shadow: rgba(27, 17, 69, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--lipari-0);
+            --bg-card: var(--lipari-1);
+            --text-primary: var(--lipari-8);
+            --text-secondary: var(--lipari-6);
+            --text-muted: var(--lipari-5);
+            --border-light: var(--lipari-2);
+            --shadow: rgba(0, 0, 0, 0.3);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--lipari-7);
-            color: var(--lipari-0);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
 
@@ -46,10 +70,27 @@
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 4px 15px rgba(27, 17, 69, 0.3);
+            position: relative;
         }
         header h1 { font-size: 1.5em; font-weight: 600; }
         header p { opacity: 0.85; font-size: 0.85em; margin-top: 5px; }
         .update-time { font-size: 0.75em; opacity: 0.7; margin-top: 8px; }
+
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            color: white;
+            font-size: 1.1em;
+            transition: background 0.2s;
+        }
+        .theme-toggle:hover { background: rgba(255,255,255,0.25); }
 
         /* Current Weather Cards */
         .current-section {
@@ -59,10 +100,11 @@
             margin: 20px 0;
         }
         .current-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(27, 17, 69, 0.08);
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: background 0.3s;
         }
         .current-card.observed {
             background: linear-gradient(135deg, var(--lipari-13) 0%, var(--lipari-11) 100%);
@@ -73,12 +115,13 @@
         .current-card.observed .detail-value { color: white; }
         .current-card.observed .detail-label { color: rgba(255,255,255,0.8); }
         .current-card.observed .wi { color: white; }
+        .current-card.observed .delta { background: rgba(255,255,255,0.25); color: white; }
 
         .card-label {
             font-size: 0.75em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--lipari-3);
+            color: var(--text-secondary);
             margin-bottom: 10px;
         }
         .current-main {
@@ -87,9 +130,21 @@
             gap: 15px;
             margin-bottom: 15px;
         }
-        .current-main .wi { font-size: 3em; color: var(--lipari-3); }
-        .current-temp { font-size: 3em; font-weight: 300; }
+        .current-main .wi { font-size: 3em; color: var(--text-secondary); }
+        .temp-display { display: flex; flex-direction: column; }
+        .current-temp { font-size: 3em; font-weight: 300; line-height: 1; }
         .current-temp sup { font-size: 0.4em; vertical-align: top; }
+        .feels-like { font-size: 0.8em; color: var(--text-muted); margin-top: 2px; }
+        .current-card.observed .feels-like { color: rgba(255,255,255,0.7); }
+        .delta {
+            display: inline-block;
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--lipari-7);
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
         .current-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
@@ -97,13 +152,14 @@
         }
         .detail-item {
             padding: 10px 6px;
-            background: var(--lipari-7);
+            background: var(--border-light);
             border-radius: 10px;
             text-align: center;
+            transition: background 0.3s;
         }
-        .detail-item .wi { font-size: 1.1em; color: var(--lipari-3); margin-bottom: 3px; }
-        .detail-value { font-size: 1em; font-weight: 600; color: var(--lipari-0); }
-        .detail-label { font-size: 0.65em; color: var(--lipari-3); text-transform: uppercase; }
+        .detail-item .wi { font-size: 1.1em; color: var(--text-secondary); margin-bottom: 3px; }
+        .detail-value { font-size: 1em; font-weight: 600; color: var(--text-primary); }
+        .detail-label { font-size: 0.65em; color: var(--text-secondary); text-transform: uppercase; }
 
         .no-obs {
             text-align: center;
@@ -115,49 +171,50 @@
         /* Plant Stress Indicators */
         .plant-stress-section {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
             margin: 20px 0;
         }
         .stress-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: background 0.3s;
         }
         .stress-header {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-weight: 600;
-            color: var(--lipari-2);
+            color: var(--text-secondary);
             margin-bottom: 10px;
         }
         .stress-header .wi { font-size: 1.2em; }
         .stress-value {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: 300;
-            color: var(--lipari-0);
+            color: var(--text-primary);
             line-height: 1.1;
         }
         .stress-unit {
-            font-size: 0.85em;
-            color: var(--lipari-4);
-            margin-bottom: 12px;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
         }
         .stress-bar-container {
-            height: 8px;
-            background: var(--lipari-7);
-            border-radius: 4px;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
             overflow: hidden;
             margin-bottom: 8px;
         }
         .stress-bar {
             height: 100%;
-            border-radius: 4px;
+            border-radius: 3px;
             transition: width 0.5s ease;
         }
         .vpd-bar {
@@ -167,11 +224,17 @@
             background: linear-gradient(90deg, var(--lipari-16) 0%, var(--lipari-9) 50%, var(--lipari-3) 100%);
         }
         .stress-label {
-            font-size: 0.7em;
-            color: var(--lipari-4);
+            font-size: 0.65em;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .watering-time {
+            font-size: 1.1em;
+            color: var(--lipari-3);
+            font-weight: 500;
+        }
+        [data-theme="dark"] .watering-time { color: var(--lipari-5); }
 
         /* Daily Forecast */
         .daily-forecast {
@@ -181,12 +244,12 @@
             margin: 20px 0;
         }
         .day-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 15px 10px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
-            transition: transform 0.2s;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: transform 0.2s, background 0.3s;
         }
         .day-card:hover { transform: translateY(-3px); }
         .day-card.today {
@@ -197,13 +260,17 @@
         .day-card.today .day-temp-min { color: rgba(255,255,255,0.7); }
         .day-card.today .day-precip { color: var(--lipari-9); }
         .day-card.today .day-wind { color: rgba(255,255,255,0.7); }
-        .day-name { font-weight: 600; font-size: 0.85em; margin-bottom: 8px; }
-        .day-icon { font-size: 2em; color: var(--lipari-3); margin: 8px 0; }
-        .day-temps { margin: 8px 0; }
-        .day-temp-max { font-size: 1.2em; font-weight: 600; }
-        .day-temp-min { font-size: 0.9em; color: var(--lipari-4); margin-left: 5px; }
-        .day-precip { font-size: 0.75em; color: var(--lipari-3); margin-top: 5px; }
-        .day-wind { font-size: 0.7em; color: var(--lipari-4); margin-top: 3px; }
+        .day-card.today .sparkline { stroke: rgba(255,255,255,0.6); }
+        .day-name { font-weight: 600; font-size: 0.85em; margin-bottom: 6px; }
+        .day-icon { font-size: 1.8em; color: var(--text-secondary); margin: 6px 0; }
+        .sparkline-container { height: 24px; margin: 4px 0; }
+        .sparkline { fill: none; stroke: var(--lipari-12); stroke-width: 1.5; }
+        .day-temps { margin: 6px 0; }
+        .day-temp-max { font-size: 1.1em; font-weight: 600; }
+        .day-temp-min { font-size: 0.85em; color: var(--text-muted); margin-left: 4px; }
+        .day-precip { font-size: 0.7em; color: var(--text-secondary); margin-top: 4px; }
+        .day-precip-prob { font-size: 0.65em; color: var(--text-muted); }
+        .day-wind { font-size: 0.65em; color: var(--text-muted); margin-top: 2px; }
 
         /* Charts */
         .charts-section {
@@ -213,65 +280,94 @@
             margin: 20px 0;
         }
         .chart-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: background 0.3s;
         }
         .chart-title {
             font-size: 0.9em;
             font-weight: 600;
-            color: var(--lipari-1);
+            color: var(--text-primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .chart-title .wi { color: var(--lipari-3); }
+        .chart-title .wi { color: var(--text-secondary); }
         .chart-container { height: 200px; }
 
-        /* Detailed Table */
+        /* Collapsible Table */
         .details-section {
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
-            padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(27, 17, 69, 0.06);
+            box-shadow: 0 2px 10px var(--shadow);
+            overflow: hidden;
+            transition: background 0.3s;
         }
-        .details-title { font-size: 1em; font-weight: 600; color: var(--lipari-0); margin-bottom: 15px; }
-        .hourly-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 600px; }
-        th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--lipari-7); }
-        th { background: var(--lipari-7); font-weight: 600; color: var(--lipari-1); position: sticky; top: 0; }
+        .details-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .details-header:hover { background: var(--border-light); }
+        .details-title { font-size: 1em; font-weight: 600; color: var(--text-primary); }
+        .collapse-icon {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+        .details-section.collapsed .collapse-icon { transform: rotate(-90deg); }
+        .details-content {
+            max-height: 400px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .details-section.collapsed .details-content { max-height: 0; }
+        .hourly-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 20px 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 700px; }
+        th, td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border-light); }
+        th { background: var(--border-light); font-weight: 600; color: var(--text-primary); position: sticky; top: 0; }
         tr:hover { background: var(--lipari-8); }
+        [data-theme="dark"] tr:hover { background: var(--lipari-2); }
         .temp-cell { color: var(--lipari-14); font-weight: 600; }
         .humid-cell { color: var(--lipari-3); }
         .wind-cell { color: var(--lipari-12); }
         .precip-cell { color: var(--lipari-2); }
+        .prob-cell { color: var(--text-muted); font-size: 0.9em; }
 
         footer {
             text-align: center;
             padding: 20px;
-            color: var(--lipari-4);
+            color: var(--text-muted);
             font-size: 0.8em;
         }
-        footer a { color: var(--lipari-2); text-decoration: none; }
+        footer a { color: var(--text-secondary); text-decoration: none; }
 
         @media (max-width: 700px) {
             .current-section { grid-template-columns: 1fr; }
             .current-details { grid-template-columns: repeat(3, 1fr); }
-            .plant-stress-section { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .stress-card { padding: 15px 10px; }
+            .plant-stress-section { grid-template-columns: 1fr; gap: 10px; }
+            .stress-card { padding: 15px; }
             .stress-value { font-size: 2em; }
             .daily-forecast { grid-template-columns: repeat(5, 1fr); gap: 6px; }
             .day-card { padding: 10px 5px; }
-            .day-icon { font-size: 1.5em; }
+            .day-icon { font-size: 1.4em; }
+            .sparkline-container { height: 20px; }
             .chart-container { height: 150px; }
         }
     </style>
 </head>
 <body>
     <header>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+            <i class="wi wi-day-sunny" id="themeIcon"></i>
+        </button>
         <h1>Morlongo Weather</h1>
         <p>Real-time observations & ML-corrected forecast</p>
         <div class="update-time" id="updateTime">Loading...</div>
@@ -290,11 +386,12 @@
                 <div id="observedContent" style="display: none;">
                     <div class="current-main">
                         <i class="wi wi-thermometer"></i>
-                        <div class="current-temp" id="obsTemp">--<sup>°C</sup></div>
+                        <div class="temp-display">
+                            <div class="current-temp" id="obsTemp">--<sup>°C</sup></div>
+                        </div>
+                        <span class="delta" id="obsDelta" style="display:none;"></span>
                     </div>
-                    <div class="current-details" id="obsDetails">
-                        <!-- Filled dynamically -->
-                    </div>
+                    <div class="current-details" id="obsDetails"></div>
                 </div>
             </div>
 
@@ -302,7 +399,10 @@
                 <div class="card-label">Forecast Now</div>
                 <div class="current-main">
                     <i class="wi wi-day-sunny" id="fcIcon"></i>
-                    <div class="current-temp" id="fcTemp">--<sup>°C</sup></div>
+                    <div class="temp-display">
+                        <div class="current-temp" id="fcTemp">--<sup>°C</sup></div>
+                        <div class="feels-like" id="fcFeelsLike">Feels like --°</div>
+                    </div>
                 </div>
                 <div class="current-details">
                     <div class="detail-item">
@@ -320,6 +420,11 @@
                         <div class="detail-value" id="fcPrecip">--</div>
                         <div class="detail-label">24h Rain</div>
                     </div>
+                    <div class="detail-item">
+                        <i class="wi wi-umbrella"></i>
+                        <div class="detail-value" id="fcPrecipProb">--%</div>
+                        <div class="detail-label">Rain Prob</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -336,19 +441,28 @@
                 <div class="stress-bar-container">
                     <div class="stress-bar vpd-bar" id="vpdBar"></div>
                 </div>
-                <div class="stress-label">Atmospheric drying power</div>
+                <div class="stress-label">Atmospheric drying</div>
             </div>
             <div class="stress-card">
                 <div class="stress-header">
                     <i class="wi wi-raindrops"></i>
-                    <span>7-Day Water Balance</span>
+                    <span>Water Balance</span>
                 </div>
                 <div class="stress-value" id="waterBalanceValue">--</div>
-                <div class="stress-unit">mm</div>
+                <div class="stress-unit">mm (7d)</div>
                 <div class="stress-bar-container">
                     <div class="stress-bar water-bar" id="waterBar"></div>
                 </div>
-                <div class="stress-label" id="waterBalanceLabel">Rain minus evaporation</div>
+                <div class="stress-label" id="waterBalanceLabel">Rain - evaporation</div>
+            </div>
+            <div class="stress-card">
+                <div class="stress-header">
+                    <i class="wi wi-sprinkle"></i>
+                    <span>Best Watering</span>
+                </div>
+                <div class="watering-time" id="wateringTime">--</div>
+                <div class="stress-unit" id="wateringVpd">lowest VPD</div>
+                <div class="stress-label">Optimal time today</div>
             </div>
         </div>
 
@@ -367,23 +481,30 @@
             </div>
         </div>
 
-        <!-- Detailed Table -->
-        <div class="details-section">
-            <div class="details-title">Hourly Forecast</div>
-            <div class="hourly-scroll">
-                <table id="hourlyTable">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Temp</th>
-                            <th>Humidity</th>
-                            <th>Wind</th>
-                            <th>Gusts</th>
-                            <th>Precip</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+        <!-- Detailed Table (Collapsible) -->
+        <div class="details-section" id="detailsSection">
+            <div class="details-header" onclick="toggleDetails()">
+                <span class="details-title">Hourly Forecast</span>
+                <i class="wi wi-direction-down collapse-icon"></i>
+            </div>
+            <div class="details-content">
+                <div class="hourly-scroll">
+                    <table id="hourlyTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Temp</th>
+                                <th>Feels</th>
+                                <th>Humidity</th>
+                                <th>Wind</th>
+                                <th>Gusts</th>
+                                <th>Precip</th>
+                                <th>Prob</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -394,31 +515,43 @@
     </footer>
 
     <script>
-        // Actual Lipari colorscale from scico/crameri
         const lipari = {
-            0: '#1B1145',   // deep purple-blue
-            1: '#2D2B6B',   // purple-blue
-            2: '#3E4A8A',   // blue
-            3: '#5369A5',   // medium blue
-            4: '#6E8ABE',   // light blue
-            5: '#8FACD4',   // lighter blue
-            6: '#B5CEE6',   // very light blue
-            7: '#DDE9F2',   // near white blue
-            8: '#F9F5EE',   // cream/white
-            9: '#F5E6D0',   // light tan
-            10: '#EDD3AF',  // tan
-            11: '#E4BC8A',  // orange-tan
-            12: '#D9A164',  // orange
-            13: '#CB8343',  // brown-orange
-            14: '#B96628',  // brown
-            15: '#A24B14',  // dark brown
-            16: '#872E08'   // deep brown
+            0: '#1B1145', 1: '#2D2B6B', 2: '#3E4A8A', 3: '#5369A5',
+            4: '#6E8ABE', 5: '#8FACD4', 6: '#B5CEE6', 7: '#DDE9F2',
+            8: '#F9F5EE', 9: '#F5E6D0', 10: '#EDD3AF', 11: '#E4BC8A',
+            12: '#D9A164', 13: '#CB8343', 14: '#B96628', 15: '#A24B14', 16: '#872E08'
         };
 
         let tempChart = null;
         let precipWindChart = null;
         let forecastData = null;
         let observationsData = null;
+
+        // Theme handling
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.getElementById('themeIcon').className = isDark ? 'wi wi-night-clear' : 'wi wi-day-sunny';
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+            updateThemeIcon();
+        }
+
+        // Collapsible table
+        function toggleDetails() {
+            document.getElementById('detailsSection').classList.toggle('collapsed');
+        }
 
         function getWeatherIcon(code, isDay = true) {
             const icons = {
@@ -435,18 +568,32 @@
             return icons[code] || (isDay ? 'wi-day-cloudy' : 'wi-night-alt-cloudy');
         }
 
+        // Generate SVG sparkline
+        function createSparkline(temps, width = 60, height = 20) {
+            if (!temps || temps.length < 2) return '';
+            const min = Math.min(...temps);
+            const max = Math.max(...temps);
+            const range = max - min || 1;
+            const points = temps.map((t, i) => {
+                const x = (i / (temps.length - 1)) * width;
+                const y = height - ((t - min) / range) * height;
+                return `${x},${y}`;
+            }).join(' ');
+            return `<svg class="sparkline-container" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+                <polyline class="sparkline" points="${points}" />
+            </svg>`;
+        }
+
         async function loadData() {
             try {
                 const [fcRes, obsRes] = await Promise.all([
                     fetch('forecast.json?t=' + Date.now()),
                     fetch('observations.json?t=' + Date.now()).catch(() => null)
                 ]);
-
                 forecastData = await fcRes.json();
                 if (obsRes && obsRes.ok) {
                     observationsData = await obsRes.json();
                 }
-
                 renderAll();
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -464,80 +611,13 @@
             renderHourlyTable();
         }
 
-        function renderPlantStress() {
-            // Get current VPD from forecast
-            const now = new Date();
-            const currentHour = forecastData.hourly.find(h => new Date(h.time) >= now) || forecastData.hourly[0];
-            const vpd = currentHour?.raw?.vpd;
-
-            if (vpd != null) {
-                document.getElementById('vpdValue').textContent = vpd.toFixed(2);
-                // VPD scale: 0 = 0%, 2.5+ kPa = 100%
-                const vpdPercent = Math.min(100, (vpd / 2.5) * 100);
-                document.getElementById('vpdBar').style.width = vpdPercent + '%';
-            }
-
-            // Calculate 7-day water balance
-            // Past precipitation from observations
-            let obsPrecip = 0;
-            let obsDays = 0;
-            if (observationsData?.observations) {
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-                // Sum hourly rain observations (rain_1h)
-                const recentObs = observationsData.observations.filter(o => new Date(o.time) >= sevenDaysAgo);
-                recentObs.forEach(o => {
-                    if (o.rain?.rain_1h != null) {
-                        obsPrecip += o.rain.rain_1h;
-                    }
-                });
-
-                // Calculate observation span in days
-                if (recentObs.length > 1) {
-                    const firstObs = new Date(recentObs[0].time);
-                    const lastObs = new Date(recentObs[recentObs.length - 1].time);
-                    obsDays = (lastObs - firstObs) / (1000 * 60 * 60 * 24);
-                }
-            }
-
-            // Estimate ET0 from forecast (daily average × observation days)
-            let dailyEt0 = 0;
-            if (forecastData?.hourly) {
-                // Sum first 24 hours of ET0 as daily estimate
-                const first24h = forecastData.hourly.slice(0, 24);
-                first24h.forEach(h => {
-                    if (h.raw?.et0 != null) {
-                        dailyEt0 += h.raw.et0;
-                    }
-                });
-            }
-
-            // Calculate balance: observed precip - estimated ET0 loss
-            const estimatedEt0Loss = dailyEt0 * Math.max(1, obsDays);
-            const waterBalance = obsPrecip - estimatedEt0Loss;
-
-            document.getElementById('waterBalanceValue').textContent = (waterBalance >= 0 ? '+' : '') + waterBalance.toFixed(1);
-
-            // Water balance scale: -30mm = 0%, +30mm = 100%, 0 = 50%
-            const waterPercent = Math.min(100, Math.max(0, ((waterBalance + 30) / 60) * 100));
-            document.getElementById('waterBar').style.width = waterPercent + '%';
-
-            // Update label with details
-            const daysLabel = obsDays > 0 ? obsDays.toFixed(0) : '7';
-            document.getElementById('waterBalanceLabel').textContent =
-                `${obsPrecip.toFixed(1)}mm rain - ${estimatedEt0Loss.toFixed(1)}mm evap (${daysLabel}d)`;
-        }
-
         function renderUpdateTime() {
             const fcTime = new Date(forecastData.meta.generated_at);
             let text = `Forecast: ${fcTime.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
-
             if (observationsData?.meta?.last_update) {
                 const obsTime = new Date(observationsData.meta.last_update);
                 text += ` | Obs: ${obsTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
             }
-
             document.getElementById('updateTime').textContent = text;
         }
 
@@ -547,7 +627,6 @@
                 document.getElementById('observedContent').style.display = 'none';
                 return;
             }
-
             document.getElementById('noObsMessage').style.display = 'none';
             document.getElementById('observedContent').style.display = 'block';
 
@@ -557,74 +636,39 @@
             const wind = current.wind || {};
             const rain = current.rain || {};
 
-            const temp = outdoor.temperature ?? indoor.temperature;
-            document.getElementById('obsTemp').innerHTML = temp != null ? `${temp.toFixed(1)}<sup>°C</sup>` : '--<sup>°C</sup>';
+            const obsTemp = outdoor.temperature ?? indoor.temperature;
+            document.getElementById('obsTemp').innerHTML = obsTemp != null ? `${obsTemp.toFixed(1)}<sup>°C</sup>` : '--<sup>°C</sup>';
+
+            // Show delta vs forecast
+            const now = new Date();
+            const currentHour = forecastData.hourly.find(h => new Date(h.time) >= now) || forecastData.hourly[0];
+            if (obsTemp != null && currentHour) {
+                const fcTemp = currentHour.debiased.temperature;
+                const delta = obsTemp - fcTemp;
+                const deltaEl = document.getElementById('obsDelta');
+                deltaEl.style.display = 'inline-block';
+                deltaEl.textContent = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}° vs fc`;
+            }
 
             let detailsHTML = '';
-
             const humidity = outdoor.humidity ?? indoor.humidity;
             if (humidity != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-humidity"></i>
-                        <div class="detail-value">${Math.round(humidity)}%</div>
-                        <div class="detail-label">Humidity</div>
-                    </div>`;
+                detailsHTML += `<div class="detail-item"><i class="wi wi-humidity"></i><div class="detail-value">${Math.round(humidity)}%</div><div class="detail-label">Humidity</div></div>`;
             }
-
             if (indoor.pressure != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-barometer"></i>
-                        <div class="detail-value">${Math.round(indoor.pressure)}</div>
-                        <div class="detail-label">hPa</div>
-                    </div>`;
+                detailsHTML += `<div class="detail-item"><i class="wi wi-barometer"></i><div class="detail-value">${Math.round(indoor.pressure)}</div><div class="detail-label">hPa</div></div>`;
             }
-
             if (wind.wind_strength != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-strong-wind"></i>
-                        <div class="detail-value">${Math.round(wind.wind_strength)}</div>
-                        <div class="detail-label">km/h</div>
-                    </div>`;
+                detailsHTML += `<div class="detail-item"><i class="wi wi-strong-wind"></i><div class="detail-value">${Math.round(wind.wind_strength)}</div><div class="detail-label">km/h</div></div>`;
             }
-
-            if (wind.gust_strength != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-wind-beaufort-6"></i>
-                        <div class="detail-value">${Math.round(wind.gust_strength)}</div>
-                        <div class="detail-label">Gusts</div>
-                    </div>`;
-            }
-
             if (rain.rain_1h != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-raindrop"></i>
-                        <div class="detail-value">${rain.rain_1h.toFixed(1)}</div>
-                        <div class="detail-label">mm/1h</div>
-                    </div>`;
+                detailsHTML += `<div class="detail-item"><i class="wi wi-raindrop"></i><div class="detail-value">${rain.rain_1h.toFixed(1)}</div><div class="detail-label">mm/1h</div></div>`;
             }
-
             if (rain.rain_24h != null) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <i class="wi wi-rain"></i>
-                        <div class="detail-value">${rain.rain_24h.toFixed(1)}</div>
-                        <div class="detail-label">mm/24h</div>
-                    </div>`;
+                detailsHTML += `<div class="detail-item"><i class="wi wi-rain"></i><div class="detail-value">${rain.rain_24h.toFixed(1)}</div><div class="detail-label">mm/24h</div></div>`;
             }
-
             const obsTime = new Date(current.time);
-            detailsHTML += `
-                <div class="detail-item">
-                    <i class="wi wi-time-3"></i>
-                    <div class="detail-value">${obsTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
-                    <div class="detail-label">Updated</div>
-                </div>`;
-
+            detailsHTML += `<div class="detail-item"><i class="wi wi-time-3"></i><div class="detail-value">${obsTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' })}</div><div class="detail-label">Updated</div></div>`;
             document.getElementById('obsDetails').innerHTML = detailsHTML;
         }
 
@@ -633,16 +677,85 @@
             const currentHour = forecastData.hourly.find(h => new Date(h.time) >= now) || forecastData.hourly[0];
             const next24h = forecastData.hourly.slice(0, 24);
             const precip24h = next24h.reduce((sum, h) => sum + (h.debiased.rain || 0), 0);
+            const maxProb = Math.max(...next24h.map(h => h.raw?.precipitation_probability || 0));
 
             const weatherCode = currentHour.raw.weather_code || 0;
-            const isDay = now.getHours() >= 6 && now.getHours() < 20;
+            const isDay = currentHour.raw?.is_day !== 0;
             const icon = getWeatherIcon(weatherCode, isDay);
 
             document.getElementById('fcIcon').className = `wi ${icon}`;
             document.getElementById('fcTemp').innerHTML = `${Math.round(currentHour.debiased.temperature)}<sup>°C</sup>`;
+
+            const feelsLike = currentHour.raw?.apparent_temperature;
+            document.getElementById('fcFeelsLike').textContent = feelsLike != null ? `Feels like ${Math.round(feelsLike)}°` : '';
+
             document.getElementById('fcHumidity').textContent = `${Math.round(currentHour.debiased.humidity)}%`;
             document.getElementById('fcWind').textContent = `${Math.round(currentHour.debiased.wind_speed)} km/h`;
             document.getElementById('fcPrecip').textContent = `${precip24h.toFixed(1)} mm`;
+            document.getElementById('fcPrecipProb').textContent = `${Math.round(maxProb)}%`;
+        }
+
+        function renderPlantStress() {
+            const now = new Date();
+            const currentHour = forecastData.hourly.find(h => new Date(h.time) >= now) || forecastData.hourly[0];
+            const vpd = currentHour?.raw?.vpd;
+
+            if (vpd != null) {
+                document.getElementById('vpdValue').textContent = vpd.toFixed(2);
+                const vpdPercent = Math.min(100, (vpd / 2.5) * 100);
+                document.getElementById('vpdBar').style.width = vpdPercent + '%';
+            }
+
+            // Water balance calculation
+            let obsPrecip = 0;
+            let obsDays = 0;
+            if (observationsData?.observations) {
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                const recentObs = observationsData.observations.filter(o => new Date(o.time) >= sevenDaysAgo);
+                recentObs.forEach(o => { if (o.rain?.rain_1h != null) obsPrecip += o.rain.rain_1h; });
+                if (recentObs.length > 1) {
+                    obsDays = (new Date(recentObs[recentObs.length - 1].time) - new Date(recentObs[0].time)) / (1000 * 60 * 60 * 24);
+                }
+            }
+
+            let dailyEt0 = 0;
+            if (forecastData?.hourly) {
+                forecastData.hourly.slice(0, 24).forEach(h => { if (h.raw?.et0 != null) dailyEt0 += h.raw.et0; });
+            }
+
+            const estimatedEt0Loss = dailyEt0 * Math.max(1, obsDays);
+            const waterBalance = obsPrecip - estimatedEt0Loss;
+            document.getElementById('waterBalanceValue').textContent = (waterBalance >= 0 ? '+' : '') + waterBalance.toFixed(1);
+            const waterPercent = Math.min(100, Math.max(0, ((waterBalance + 30) / 60) * 100));
+            document.getElementById('waterBar').style.width = waterPercent + '%';
+            const daysLabel = obsDays > 0 ? obsDays.toFixed(0) : '7';
+            document.getElementById('waterBalanceLabel').textContent = `${obsPrecip.toFixed(1)} rain - ${estimatedEt0Loss.toFixed(1)} evap`;
+
+            // Best watering time (lowest VPD in next 24h)
+            const today = new Date();
+            const todayEnd = new Date(today);
+            todayEnd.setHours(23, 59, 59);
+            const todayHours = forecastData.hourly.filter(h => {
+                const t = new Date(h.time);
+                return t >= today && t <= todayEnd;
+            });
+
+            if (todayHours.length > 0) {
+                let minVpd = Infinity;
+                let bestHour = null;
+                todayHours.forEach(h => {
+                    if (h.raw?.vpd != null && h.raw.vpd < minVpd) {
+                        minVpd = h.raw.vpd;
+                        bestHour = h;
+                    }
+                });
+                if (bestHour) {
+                    const t = new Date(bestHour.time);
+                    document.getElementById('wateringTime').textContent = t.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+                    document.getElementById('wateringVpd').textContent = `VPD: ${minVpd.toFixed(2)} kPa`;
+                }
+            }
         }
 
         function renderDailyForecast() {
@@ -663,6 +776,7 @@
                 const maxTemp = Math.round(Math.max(...temps));
                 const minTemp = Math.round(Math.min(...temps));
                 const precip = day.hours.reduce((sum, h) => sum + (h.debiased.rain || 0), 0);
+                const maxProb = Math.max(...day.hours.map(h => h.raw?.precipitation_probability || 0));
                 const avgWind = day.hours.reduce((sum, h) => sum + h.debiased.wind_speed, 0) / day.hours.length;
 
                 const middayHour = day.hours.find(h => new Date(h.time).getHours() === 12) || day.hours[Math.floor(day.hours.length/2)];
@@ -670,45 +784,46 @@
                 const isToday = day.date.toDateString() === today;
                 const dayName = isToday ? 'Today' : dayNames[day.date.getDay()];
 
+                const sparkline = createSparkline(temps);
+
                 return `
                     <div class="day-card ${isToday ? 'today' : ''}">
                         <div class="day-name">${dayName}</div>
                         <i class="wi ${icon} day-icon"></i>
+                        ${sparkline}
                         <div class="day-temps">
                             <span class="day-temp-max">${maxTemp}°</span>
                             <span class="day-temp-min">${minTemp}°</span>
                         </div>
-                        ${precip > 0.1 ? `<div class="day-precip"><i class="wi wi-raindrop"></i>${precip.toFixed(1)}mm</div>` : '<div class="day-precip">-</div>'}
-                        <div class="day-wind"><i class="wi wi-strong-wind"></i> ${Math.round(avgWind)} km/h</div>
+                        ${precip > 0.1 ? `<div class="day-precip"><i class="wi wi-raindrop"></i> ${precip.toFixed(1)}mm</div>` : '<div class="day-precip">-</div>'}
+                        ${maxProb > 10 ? `<div class="day-precip-prob">${Math.round(maxProb)}% chance</div>` : ''}
+                        <div class="day-wind"><i class="wi wi-strong-wind"></i> ${Math.round(avgWind)}</div>
                     </div>
                 `;
             }).join('');
         }
 
         function renderCharts() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const gridColor = isDark ? lipari[2] : lipari[7];
+
             const fcStep = 2;
             const fcSampled = forecastData.hourly.filter((_, i) => i % fcStep === 0);
             const fcTimes = fcSampled.map(h => new Date(h.time));
             const fcTemps = fcSampled.map(h => h.debiased.temperature);
             const fcPrecip = fcSampled.map(h => h.debiased.rain);
 
-            // Filter observations to last 5 days
             const fiveDaysAgo = new Date();
             fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
-            let obsTimes = [];
-            let obsTemps = [];
-            let obsPrecip = [];
-
+            let obsTimes = [], obsTemps = [], obsPrecip = [];
             if (observationsData?.observations) {
                 const obs = observationsData.observations.filter(o => new Date(o.time) >= fiveDaysAgo);
                 obsTimes = obs.map(o => new Date(o.time));
                 obsTemps = obs.map(o => o.outdoor?.temperature ?? o.indoor?.temperature ?? null);
-                // Get 1h rain from observations
                 obsPrecip = obs.map(o => o.rain?.rain_1h ?? null);
             }
 
-            // Calculate x-axis range: 5 days ago to end of forecast
             const xMin = fiveDaysAgo;
             const xMax = fcTimes.length > 0 ? fcTimes[fcTimes.length - 1] : new Date();
 
@@ -718,7 +833,7 @@
             const tempDatasets = [{
                 label: 'Forecast',
                 data: fcTimes.map((t, i) => ({ x: t, y: fcTemps[i] })),
-                borderColor: lipari[3],  // medium blue
+                borderColor: lipari[3],
                 backgroundColor: lipari[3] + '20',
                 borderWidth: 2,
                 tension: 0.4,
@@ -730,7 +845,7 @@
                 tempDatasets.unshift({
                     label: 'Observed',
                     data: obsTimes.map((t, i) => ({ x: t, y: obsTemps[i] })),
-                    borderColor: lipari[13],  // brown-orange
+                    borderColor: lipari[13],
                     backgroundColor: lipari[13] + '30',
                     borderWidth: 2,
                     tension: 0.4,
@@ -745,60 +860,25 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: obsTimes.length > 0, position: 'top', labels: { boxWidth: 12 } }
-                    },
+                    plugins: { legend: { display: obsTimes.length > 0, position: 'top', labels: { boxWidth: 12 } } },
                     scales: {
-                        x: {
-                            type: 'time',
-                            min: xMin,
-                            max: xMax,
-                            time: { unit: 'day', displayFormats: { day: 'EEE' } },
-                            grid: { display: false }
-                        },
-                        y: { grid: { color: lipari[7] } }
+                        x: { type: 'time', min: xMin, max: xMax, time: { unit: 'day', displayFormats: { day: 'EEE' } }, grid: { display: false } },
+                        y: { grid: { color: gridColor } }
                     }
                 }
             });
 
-            // Precipitation & Wind chart with observations
             const ctxPW = document.getElementById('precipWindChart').getContext('2d');
             if (precipWindChart) precipWindChart.destroy();
 
             const precipDatasets = [
-                {
-                    label: 'Precip Forecast (mm)',
-                    data: fcTimes.map((t, i) => ({ x: t, y: fcPrecip[i] })),
-                    backgroundColor: lipari[2] + 'CC',  // blue
-                    borderRadius: 3,
-                    yAxisID: 'y',
-                    type: 'bar',
-                    barPercentage: 0.8
-                },
-                {
-                    label: 'Wind Forecast (km/h)',
-                    data: fcSampled.map(h => ({ x: new Date(h.time), y: h.debiased.wind_speed })),
-                    type: 'line',
-                    borderColor: lipari[12],  // orange
-                    borderWidth: 2,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    yAxisID: 'y1'
-                }
+                { label: 'Precip (mm)', data: fcTimes.map((t, i) => ({ x: t, y: fcPrecip[i] })), backgroundColor: lipari[2] + 'CC', borderRadius: 3, yAxisID: 'y', type: 'bar', barPercentage: 0.8 },
+                { label: 'Wind (km/h)', data: fcSampled.map(h => ({ x: new Date(h.time), y: h.debiased.wind_speed })), type: 'line', borderColor: lipari[12], borderWidth: 2, tension: 0.4, pointRadius: 0, yAxisID: 'y1' }
             ];
 
-            // Add observed precipitation if available
             const hasObsPrecip = obsPrecip.some(p => p !== null && p > 0);
             if (hasObsPrecip) {
-                precipDatasets.unshift({
-                    label: 'Precip Observed (mm)',
-                    data: obsTimes.map((t, i) => ({ x: t, y: obsPrecip[i] })),
-                    backgroundColor: lipari[14] + 'CC',  // brown
-                    borderRadius: 3,
-                    yAxisID: 'y',
-                    type: 'bar',
-                    barPercentage: 0.8
-                });
+                precipDatasets.unshift({ label: 'Precip Obs (mm)', data: obsTimes.map((t, i) => ({ x: t, y: obsPrecip[i] })), backgroundColor: lipari[14] + 'CC', borderRadius: 3, yAxisID: 'y', type: 'bar', barPercentage: 0.8 });
             }
 
             precipWindChart = new Chart(ctxPW, {
@@ -807,19 +887,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } }
-                    },
+                    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
                     scales: {
-                        x: {
-                            type: 'time',
-                            min: xMin,
-                            max: xMax,
-                            time: { unit: 'day', displayFormats: { day: 'EEE' } },
-                            grid: { display: false },
-                            stacked: false
-                        },
-                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 10 } }, grid: { color: lipari[7] }, min: 0 },
+                        x: { type: 'time', min: xMin, max: xMax, time: { unit: 'day', displayFormats: { day: 'EEE' } }, grid: { display: false }, stacked: false },
+                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 10 } }, grid: { color: gridColor }, min: 0 },
                         y1: { position: 'right', title: { display: true, text: 'km/h', font: { size: 10 } }, grid: { display: false }, min: 0 }
                     }
                 }
@@ -834,22 +905,33 @@
             tbody.innerHTML = filtered.map(h => {
                 const d = new Date(h.time);
                 const timeStr = d.toLocaleDateString('en-US', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+                const feelsLike = h.raw?.apparent_temperature;
+                const prob = h.raw?.precipitation_probability;
 
                 return `
                     <tr>
                         <td>${timeStr}</td>
                         <td class="temp-cell">${h.debiased.temperature.toFixed(1)}°C</td>
+                        <td>${feelsLike != null ? Math.round(feelsLike) + '°' : '-'}</td>
                         <td class="humid-cell">${Math.round(h.debiased.humidity)}%</td>
                         <td class="wind-cell">${h.debiased.wind_speed.toFixed(0)} km/h</td>
                         <td>${h.debiased.gust_speed.toFixed(0)} km/h</td>
                         <td class="precip-cell">${h.debiased.rain > 0.01 ? h.debiased.rain.toFixed(1) + ' mm' : '-'}</td>
+                        <td class="prob-cell">${prob != null ? Math.round(prob) + '%' : '-'}</td>
                     </tr>
                 `;
             }).join('');
         }
 
+        // Initialize
+        initTheme();
         loadData();
-        setInterval(loadData, 30 * 60 * 1000);
+        setInterval(loadData, 20 * 60 * 1000);
+
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
     </script>
 </body>
 </html>
