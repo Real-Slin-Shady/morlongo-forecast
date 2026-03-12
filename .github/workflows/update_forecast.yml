@@ -21,10 +21,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests xgboost numpy
+          pip install requests xgboost numpy scikit-learn
 
       - name: Fetch Netatmo observations
-        if: ${{ env.NETATMO_CLIENT_ID != '' }}
         env:
           NETATMO_CLIENT_ID: ${{ secrets.NETATMO_CLIENT_ID }}
           NETATMO_CLIENT_SECRET: ${{ secrets.NETATMO_CLIENT_SECRET }}
