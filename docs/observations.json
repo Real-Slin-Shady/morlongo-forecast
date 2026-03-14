@@ -1,30 +1,30 @@
 {
   "meta": {
     "station_name": "Morlongo 17 (Weather Station)",
-    "last_update": "2026-03-14T04:24:37.114241+01:00",
+    "last_update": "2026-03-14T05:59:33.204953+01:00",
     "history_days": 7,
-    "observation_count": 56
+    "observation_count": 57
   },
   "current": {
-    "time": "2026-03-14T04:24:37.114241+01:00",
+    "time": "2026-03-14T05:59:33.204953+01:00",
     "station_name": "Morlongo 17 (Weather Station)",
     "indoor": {
-      "temperature": 17.9,
-      "humidity": 50,
-      "pressure": 1005.9,
-      "co2": 859,
-      "noise": 33,
-      "time_utc": 1773458457
+      "temperature": 18.2,
+      "humidity": 49,
+      "pressure": 1004.5,
+      "co2": 835,
+      "noise": 32,
+      "time_utc": 1773463892
     },
     "outdoor": {
-      "temperature": 7.1,
-      "humidity": 91,
-      "time_utc": 1773458427
+      "temperature": 6.4,
+      "humidity": 90,
+      "time_utc": 1773463863
     },
     "rain": {
-      "rain_1h": 0.707,
-      "rain_24h": 3.3,
-      "time_utc": 1773458453
+      "rain_1h": 1.212,
+      "rain_24h": 5.4,
+      "time_utc": 1773463889
     },
     "wind": {
       "wind_strength": null,
@@ -1650,6 +1650,35 @@
         "rain_1h": 0.707,
         "rain_24h": 3.3,
         "time_utc": 1773458453
+      },
+      "wind": {
+        "wind_strength": null,
+        "wind_angle": null,
+        "gust_strength": null,
+        "gust_angle": null,
+        "time_utc": null
+      }
+    },
+    {
+      "time": "2026-03-14T05:59:33.204953+01:00",
+      "station_name": "Morlongo 17 (Weather Station)",
+      "indoor": {
+        "temperature": 18.2,
+        "humidity": 49,
+        "pressure": 1004.5,
+        "co2": 835,
+        "noise": 32,
+        "time_utc": 1773463892
+      },
+      "outdoor": {
+        "temperature": 6.4,
+        "humidity": 90,
+        "time_utc": 1773463863
+      },
+      "rain": {
+        "rain_1h": 1.212,
+        "rain_24h": 5.4,
+        "time_utc": 1773463889
       },
       "wind": {
         "wind_strength": null,
