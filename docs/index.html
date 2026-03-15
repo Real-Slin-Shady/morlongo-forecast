@@ -171,7 +171,7 @@
         /* Plant Stress Indicators */
         .plant-stress-section {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin: 20px 0;
         }
@@ -206,50 +206,37 @@
             margin-bottom: 10px;
         }
         .stress-bar-container {
-            height: 12px;
-            border-radius: 6px;
-            overflow: visible;
-            margin-bottom: 8px;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            margin-bottom: 6px;
+            background: var(--border-light);
             position: relative;
         }
-        .stress-bar-bg {
+        .stress-bar {
             height: 100%;
-            border-radius: 6px;
-            width: 100%;
+            border-radius: 7px;
+            transition: width 0.5s ease;
+            /* Gradient spans full container width, so visible portion shows correct color */
+            background-size: calc(100vw) 100%;
+            background-position: left;
         }
-        .vpd-bar-bg {
-            background: linear-gradient(90deg, var(--lipari-5) 0%, var(--lipari-9) 25%, var(--lipari-12) 50%, var(--lipari-15) 75%, var(--lipari-16) 100%);
+        .vpd-bar {
+            /* Blue (good) -> Yellow/Orange (moderate) -> Red (stress) */
+            background-image: linear-gradient(90deg, var(--lipari-5) 0%, var(--lipari-9) 30%, var(--lipari-12) 50%, var(--lipari-15) 75%, var(--lipari-16) 100%);
         }
-        .water-bar-bg {
-            background: linear-gradient(90deg, var(--lipari-16) 0%, var(--lipari-13) 25%, var(--lipari-9) 50%, var(--lipari-5) 75%, var(--lipari-3) 100%);
+        .water-bar {
+            /* Red (deficit) -> Neutral (balanced) -> Blue (surplus) */
+            background-image: linear-gradient(90deg, var(--lipari-16) 0%, var(--lipari-13) 25%, var(--lipari-9) 50%, var(--lipari-5) 75%, var(--lipari-3) 100%);
         }
-        .stress-marker {
-            position: absolute;
-            top: -4px;
-            width: 4px;
-            height: 20px;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transform: translateX(-50%);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            transition: left 0.5s ease;
-        }
-        .stress-marker::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid var(--text-primary);
+        .humidity-bar {
+            /* Yellow (dry) -> Green/Blue (comfortable) -> Blue (humid) */
+            background-image: linear-gradient(90deg, var(--lipari-11) 0%, var(--lipari-9) 30%, var(--lipari-5) 50%, var(--lipari-4) 70%, var(--lipari-3) 100%);
         }
         .scale-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 0.55em;
+            font-size: 0.6em;
             color: var(--text-muted);
             margin-top: 2px;
         }
@@ -326,7 +313,7 @@
             gap: 8px;
         }
         .chart-title .wi { color: var(--text-secondary); }
-        .chart-container { height: 280px; }
+        .chart-container { height: 350px; }
 
         /* Collapsible Table */
         .details-section {
@@ -379,17 +366,20 @@
         }
         footer a { color: var(--text-secondary); text-decoration: none; }
 
+        @media (max-width: 900px) {
+            .plant-stress-section { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 700px) {
             .current-section { grid-template-columns: 1fr; }
             .current-details { grid-template-columns: repeat(3, 1fr); }
-            .plant-stress-section { grid-template-columns: 1fr; gap: 10px; }
+            .plant-stress-section { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .stress-card { padding: 15px; }
-            .stress-value { font-size: 2em; }
+            .stress-value { font-size: 1.8em; }
             .daily-forecast { grid-template-columns: repeat(5, 1fr); gap: 6px; }
             .day-card { padding: 10px 5px; }
             .day-icon { font-size: 1.4em; }
             .sparkline-container { height: 20px; }
-            .chart-container { height: 220px; }
+            .chart-container { height: 280px; }
         }
     </style>
 </head>
@@ -484,10 +474,9 @@
                 <div class="stress-value" id="vpdValue">--</div>
                 <div class="stress-unit">kPa</div>
                 <div class="stress-bar-container">
-                    <div class="stress-bar-bg vpd-bar-bg"></div>
-                    <div class="stress-marker" id="vpdMarker"></div>
+                    <div class="stress-bar vpd-bar" id="vpdBar"></div>
                 </div>
-                <div class="scale-labels"><span>0</span><span>1.0</span><span>2.0</span><span>3.0+</span></div>
+                <div class="scale-labels"><span>Low</span><span>Moderate</span><span>High</span></div>
                 <div class="stress-label">Atmospheric drying</div>
             </div>
             <div class="stress-card">
@@ -498,11 +487,23 @@
                 <div class="stress-value" id="waterBalanceValue">--</div>
                 <div class="stress-unit">mm (7d)</div>
                 <div class="stress-bar-container">
-                    <div class="stress-bar-bg water-bar-bg"></div>
-                    <div class="stress-marker" id="waterMarker"></div>
+                    <div class="stress-bar water-bar" id="waterBar"></div>
                 </div>
-                <div class="scale-labels"><span>-30</span><span>-15</span><span>0</span><span>+15</span><span>+30</span></div>
+                <div class="scale-labels"><span>Deficit</span><span>Balanced</span><span>Surplus</span></div>
                 <div class="stress-label" id="waterBalanceLabel">Rain - evaporation</div>
+            </div>
+            <div class="stress-card">
+                <div class="stress-header">
+                    <i class="wi wi-humidity"></i>
+                    <span>Humidity</span>
+                </div>
+                <div class="stress-value" id="humidityValue">--</div>
+                <div class="stress-unit">%</div>
+                <div class="stress-bar-container">
+                    <div class="stress-bar humidity-bar" id="humidityBar"></div>
+                </div>
+                <div class="scale-labels"><span>Dry</span><span>Comfortable</span><span>Humid</span></div>
+                <div class="stress-label">Relative humidity</div>
             </div>
             <div class="stress-card">
                 <div class="stress-header">
@@ -742,8 +743,17 @@
             if (vpd != null) {
                 document.getElementById('vpdValue').textContent = vpd.toFixed(2);
                 // VPD scale: 0-3.0+ kPa (typical range for subtropical climate)
-                const vpdPercent = Math.min(100, Math.max(0, (vpd / 3.0) * 100));
-                document.getElementById('vpdMarker').style.left = vpdPercent + '%';
+                const vpdPercent = Math.min(100, Math.max(5, (vpd / 3.0) * 100));
+                document.getElementById('vpdBar').style.width = vpdPercent + '%';
+            }
+
+            // Humidity display
+            const humidity = currentHour?.debiased?.humidity ?? currentHour?.raw?.humidity;
+            if (humidity != null) {
+                document.getElementById('humidityValue').textContent = Math.round(humidity);
+                // Humidity 0-100%
+                const humidityPercent = Math.min(100, Math.max(5, humidity));
+                document.getElementById('humidityBar').style.width = humidityPercent + '%';
             }
 
             // Water balance calculation
@@ -768,8 +778,8 @@
             const waterBalance = obsPrecip - estimatedEt0Loss;
             document.getElementById('waterBalanceValue').textContent = (waterBalance >= 0 ? '+' : '') + waterBalance.toFixed(1);
             // Water balance scale: -30mm to +30mm
-            const waterPercent = Math.min(100, Math.max(0, ((waterBalance + 30) / 60) * 100));
-            document.getElementById('waterMarker').style.left = waterPercent + '%';
+            const waterPercent = Math.min(100, Math.max(5, ((waterBalance + 30) / 60) * 100));
+            document.getElementById('waterBar').style.width = waterPercent + '%';
             document.getElementById('waterBalanceLabel').textContent = `${obsPrecip.toFixed(1)} rain - ${estimatedEt0Loss.toFixed(1)} evap`;
 
             // Best watering time (lowest VPD in next 24h)
@@ -923,20 +933,71 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: hasMultipleDatasets, position: 'top', labels: { boxWidth: 12 } } },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: hasMultipleDatasets, position: 'top', labels: { boxWidth: 12 } },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(27, 17, 69, 0.9)',
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 12 },
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                title: (items) => {
+                                    if (items.length) {
+                                        const d = new Date(items[0].parsed.x);
+                                        return d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                                    }
+                                    return '';
+                                },
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}°C`
+                            }
+                        }
+                    },
                     scales: {
                         x: { type: 'time', min: xMin, max: xMax, time: { unit: 'day', displayFormats: { day: 'EEE' } }, grid: { display: false } },
-                        y: { grid: { color: gridColor } }
-                    }
+                        y: { grid: { color: gridColor }, title: { display: true, text: '°C', font: { size: 10 } } }
+                    },
+                    hover: { mode: 'index', intersect: false }
                 }
             });
 
             const ctxPW = document.getElementById('precipWindChart').getContext('2d');
             if (precipWindChart) precipWindChart.destroy();
 
+            // Precipitation dataset with larger, more visible bars
             const precipDatasets = [
-                { label: 'Precip Forecast', data: fcTimes.map((t, i) => ({ x: t, y: fcPrecip[i] })), backgroundColor: lipari[2] + 'CC', borderRadius: 3, yAxisID: 'y', type: 'bar', barPercentage: 0.8 },
-                { label: 'Wind (km/h)', data: fcSampled.map(h => ({ x: new Date(h.time), y: h.debiased.wind_speed })), type: 'line', borderColor: lipari[12], borderWidth: 2, tension: 0.4, pointRadius: 0, yAxisID: 'y1' }
+                {
+                    label: 'Precip Forecast',
+                    data: fcTimes.map((t, i) => ({ x: t, y: fcPrecip[i] })),
+                    backgroundColor: lipari[2],
+                    borderColor: lipari[1],
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    yAxisID: 'y',
+                    type: 'bar',
+                    barThickness: 'flex',
+                    maxBarThickness: 20,
+                    categoryPercentage: 0.9,
+                    barPercentage: 0.95
+                },
+                {
+                    label: 'Wind (km/h)',
+                    data: fcSampled.map(h => ({ x: new Date(h.time), y: h.debiased.wind_speed })),
+                    type: 'line',
+                    borderColor: lipari[12],
+                    backgroundColor: lipari[12] + '20',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    fill: true,
+                    yAxisID: 'y1'
+                }
             ];
 
             // Add historical forecast precipitation
@@ -948,20 +1009,38 @@
 
                 if (histPrecipData.length > 0) {
                     precipDatasets.unshift({
-                        label: 'Past Fc Precip',
+                        label: 'Past Forecast',
                         data: histPrecipData,
-                        backgroundColor: lipari[4] + 'AA',
-                        borderRadius: 3,
+                        backgroundColor: lipari[4],
+                        borderColor: lipari[3],
+                        borderWidth: 1,
+                        borderRadius: 4,
                         yAxisID: 'y',
                         type: 'bar',
-                        barPercentage: 0.6
+                        barThickness: 'flex',
+                        maxBarThickness: 20,
+                        categoryPercentage: 0.9,
+                        barPercentage: 0.95
                     });
                 }
             }
 
             const hasObsPrecip = obsPrecip.some(p => p !== null && p > 0);
             if (hasObsPrecip) {
-                precipDatasets.unshift({ label: 'Precip Observed', data: obsTimes.map((t, i) => ({ x: t, y: obsPrecip[i] })), backgroundColor: lipari[14] + 'CC', borderRadius: 3, yAxisID: 'y', type: 'bar', barPercentage: 0.8 });
+                precipDatasets.unshift({
+                    label: 'Observed',
+                    data: obsTimes.map((t, i) => ({ x: t, y: obsPrecip[i] })),
+                    backgroundColor: lipari[14],
+                    borderColor: lipari[15],
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    yAxisID: 'y',
+                    type: 'bar',
+                    barThickness: 'flex',
+                    maxBarThickness: 20,
+                    categoryPercentage: 0.9,
+                    barPercentage: 0.95
+                });
             }
 
             precipWindChart = new Chart(ctxPW, {
@@ -970,12 +1049,40 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(27, 17, 69, 0.9)',
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 12 },
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                title: (items) => {
+                                    if (items.length) {
+                                        const d = new Date(items[0].parsed.x);
+                                        return d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                                    }
+                                    return '';
+                                },
+                                label: (ctx) => {
+                                    const unit = ctx.dataset.yAxisID === 'y1' ? ' km/h' : ' mm';
+                                    return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}${unit}`;
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         x: { type: 'time', min: xMin, max: xMax, time: { unit: 'day', displayFormats: { day: 'EEE' } }, grid: { display: false }, stacked: false },
-                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 10 } }, grid: { color: gridColor }, min: 0 },
-                        y1: { position: 'right', title: { display: true, text: 'km/h', font: { size: 10 } }, grid: { display: false }, min: 0 }
-                    }
+                        y: { position: 'left', title: { display: true, text: 'mm', font: { size: 11 } }, grid: { color: gridColor }, min: 0, suggestedMax: 10 },
+                        y1: { position: 'right', title: { display: true, text: 'km/h', font: { size: 11 } }, grid: { display: false }, min: 0 }
+                    },
+                    hover: { mode: 'index', intersect: false }
                 }
             });
         }
