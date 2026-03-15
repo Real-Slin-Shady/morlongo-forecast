@@ -1,4 +1,4 @@
-const CACHE_NAME = 'morlongo-weather-v1';
+const CACHE_NAME = 'morlongo-weather-v2';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -26,12 +26,12 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: network-first for data, cache-first for assets
+// Fetch: network-first for HTML and data, cache-first for external assets
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // JSON data: network first, fall back to cache
-  if (url.pathname.endsWith('.json')) {
+  // JSON data and HTML: network first, fall back to cache
+  if (url.pathname.endsWith('.json') || url.pathname.endsWith('.html') || url.pathname === '/' || url.pathname.endsWith('/')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
@@ -44,7 +44,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets: cache first
+  // External assets (CDN): cache first
   event.respondWith(
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
