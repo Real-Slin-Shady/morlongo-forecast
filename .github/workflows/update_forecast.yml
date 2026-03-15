@@ -2,8 +2,8 @@ name: Update Forecast & Observations
 
 on:
   schedule:
-    # Run every 20 minutes
-    - cron: '*/20 * * * *'
+    # Run every 30 minutes for Netatmo observations
+    - cron: '*/30 * * * *'
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
@@ -34,7 +34,20 @@ jobs:
         run: python fetch_observations.py
         continue-on-error: true  # Don't fail if Netatmo is down
 
+      - name: Check if forecast should run
+        id: check_forecast
+        run: |
+          HOUR=$(date -u +%H)
+          MINUTE=$(date -u +%M)
+          # Run forecast every 2 hours (at even hours, minute 0 or close to it)
+          if [ $((10#$HOUR % 2)) -eq 0 ] && [ $((10#$MINUTE)) -lt 35 ]; then
+            echo "run_forecast=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_forecast=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Generate debiased forecast
+        if: steps.check_forecast.outputs.run_forecast == 'true' || github.event_name == 'workflow_dispatch'
         run: python generate_forecast_v4.py
 
       - name: Commit and push
