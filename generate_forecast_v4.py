@@ -104,7 +104,7 @@ def fetch_forecast():
         "hourly": ",".join(FORECAST_VARS),
         "models": "meteoswiss_icon_ch2",
         "past_hours": SEQ_LENGTH + 6,  # Need history for sequences
-        "forecast_days": 5,
+        "forecast_days": 6,  # Request 6 days to ensure 120h available from any time of day
         "timezone": "Europe/Zurich"
     }
     response = requests.get(url, params=params, timeout=30)
@@ -312,9 +312,22 @@ def generate_output(times, features, predictions):
             start_idx = i
             break
 
-    # Limit to 120 hours (5 days) of forecast
+    # Find last index with valid raw data
+    # MeteoSwiss ICON-CH2 has ~5.5 day horizon from 00:00 UTC, so valid hours depend on time of day
+    last_valid_idx = len(times) - 1
+    for i in range(len(times) - 1, -1, -1):
+        if features["fc_temperature_2m"][i] is not None and features["fc_wind_speed_10m"][i] is not None:
+            last_valid_idx = i
+            break
+
+    # Limit to 120 hours (5 days) of forecast, but stop at last valid data
     MAX_HOURS = 120
-    end_idx = min(start_idx + MAX_HOURS, len(times))
+    available_hours = last_valid_idx - start_idx + 1
+    end_idx = min(start_idx + MAX_HOURS, last_valid_idx + 1)
+    actual_hours = end_idx - start_idx
+
+    if actual_hours < MAX_HOURS:
+        print(f"  Note: MeteoSwiss model provides {available_hours}h from now (limit: {MAX_HOURS}h)")
 
     output = {
         "meta": {
