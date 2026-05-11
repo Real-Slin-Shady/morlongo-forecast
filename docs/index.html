@@ -763,7 +763,7 @@
                 <div class="chart-container"><canvas id="precipWindChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title"><i class="wi wi-rain"></i> Daily Rain — Last 30 Days</div>
+                <div class="chart-title"><i class="wi wi-rain"></i> Daily Rain & Evaporation — Last 30 Days</div>
                 <div class="chart-container" style="height: 220px;"><canvas id="rainHistoryChart"></canvas></div>
             </div>
         </div>
@@ -1791,14 +1791,14 @@
             });
         }
 
-        function renderRainHistory() {
+        async function renderRainHistory() {
             const canvas = document.getElementById('rainHistoryChart');
             if (!canvas || !observationsData?.observations) return;
 
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const gridColor = isDark ? lipari[2] : lipari[7];
 
-            // Sum rain_1h per calendar day; take one sample per hour to avoid double-counting
+            // Sum rain_1h per calendar day; one sample per hour to avoid double-counting
             const dailyRain = {};
             const seen = new Set();
             observationsData.observations.forEach(o => {
@@ -1811,42 +1811,91 @@
                 dailyRain[dayKey] = (dailyRain[dayKey] || 0) + o.rain.rain_1h;
             });
 
-            const days = Object.keys(dailyRain).sort((a, b) => new Date(a) - new Date(b));
-            if (days.length === 0) return;
+            // Fetch ICON-CH2 hourly ET0 for the last ~31 days from Open-Meteo's
+            // historical-forecast-api and aggregate per local calendar day.
+            const dailyEt0 = {};
+            try {
+                const end = new Date();
+                const start = new Date();
+                start.setDate(start.getDate() - 31);
+                const fmt = d => d.toISOString().slice(0, 10);
+                const url = `https://historical-forecast-api.open-meteo.com/v1/forecast`
+                    + `?latitude=46.021245&longitude=8.239861`
+                    + `&hourly=et0_fao_evapotranspiration`
+                    + `&models=meteoswiss_icon_ch2`
+                    + `&timezone=Europe%2FZurich`
+                    + `&start_date=${fmt(start)}&end_date=${fmt(end)}`;
+                const res = await fetch(url);
+                if (res.ok) {
+                    const j = await res.json();
+                    const times = j.hourly?.time || [];
+                    const et0s = j.hourly?.et0_fao_evapotranspiration || [];
+                    times.forEach((t, i) => {
+                        if (et0s[i] == null) return;
+                        const dayKey = new Date(t).toDateString();
+                        dailyEt0[dayKey] = (dailyEt0[dayKey] || 0) + et0s[i];
+                    });
+                }
+            } catch (e) {
+                console.warn('ET0 history fetch failed', e);
+            }
+
+            const dayKeys = Array.from(new Set([...Object.keys(dailyRain), ...Object.keys(dailyEt0)]))
+                .sort((a, b) => new Date(a) - new Date(b));
+            if (dayKeys.length === 0) return;
+
+            const labels = dayKeys.map(d => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            const rainData = dayKeys.map(d => +((dailyRain[d] || 0)).toFixed(1));
+            const et0Data = dayKeys.map(d => +((dailyEt0[d] || 0)).toFixed(1));
 
             if (rainHistoryChart) rainHistoryChart.destroy();
             rainHistoryChart = new Chart(canvas.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    datasets: [{
-                        label: 'Daily Rain',
-                        data: days.map(d => ({ x: new Date(d), y: +dailyRain[d].toFixed(1) })),
-                        backgroundColor: '#3E4A8A',
-                        borderColor: '#2D2B6B',
-                        borderWidth: 1,
-                        borderRadius: 3,
-                        barThickness: 'flex',
-                        maxBarThickness: 30
-                    }]
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Rain',
+                            data: rainData,
+                            backgroundColor: '#3E4A8A',
+                            borderColor: '#2D2B6B',
+                            borderWidth: 1,
+                            borderRadius: 3
+                        },
+                        {
+                            label: 'Evaporation (ET₀)',
+                            data: et0Data,
+                            backgroundColor: '#D9A164',
+                            borderColor: '#B96628',
+                            borderWidth: 1,
+                            borderRadius: 3
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false },
+                        legend: { display: true, position: 'top', labels: { font: { size: 11 }, boxWidth: 12 } },
                         tooltip: {
                             backgroundColor: 'rgba(27, 17, 69, 0.9)',
                             titleFont: { size: 13 },
                             bodyFont: { size: 12 },
                             padding: 12,
                             callbacks: {
-                                title: (items) => new Date(items[0].parsed.x).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-                                label: (ctx) => `${ctx.parsed.y.toFixed(1)} mm`
+                                title: (items) => {
+                                    const d = new Date(dayKeys[items[0].dataIndex]);
+                                    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                                },
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} mm`
                             }
                         }
                     },
                     scales: {
-                        x: { type: 'time', time: { unit: 'day', displayFormats: { day: 'MMM d' } }, grid: { display: false } },
+                        x: {
+                            grid: { display: false },
+                            ticks: { autoSkip: true, maxRotation: 0, maxTicksLimit: 12, font: { size: 10 } }
+                        },
                         y: { min: 0, title: { display: true, text: 'mm', font: { size: 11 }, color: '#3E4A8A' }, grid: { color: gridColor } }
                     }
                 }
