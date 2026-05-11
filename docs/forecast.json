@@ -3,7 +3,7 @@
     "location": "Morlongo",
     "lat": 46.021245,
     "lon": 8.239861,
-    "generated_at": "2026-05-11T14:48:00.700059+02:00",
+    "generated_at": "2026-05-11T14:48:50.121833+02:00",
     "model": "V4 Hybrid: Conv1D+MLP (temp/humidity/rain) + XGBoost (wind)",
     "forecast_hours": 114
   },
