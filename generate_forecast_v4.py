@@ -11,11 +11,15 @@ import requests
 import joblib
 import torch
 import torch.nn as nn
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-# Timezone
+# Timezones
+# Training derived time features (hour_sin/cos, month_sin/cos, doy_sin/cos)
+# from UTC timestamps, so inference must do the same. TZ is only used for
+# display-side conversion of the output timestamps.
+UTC = timezone.utc
 TZ = ZoneInfo("Europe/Zurich")
 
 # Configuration
@@ -105,7 +109,7 @@ def fetch_forecast():
         "models": "meteoswiss_icon_ch2",
         "past_hours": SEQ_LENGTH + 6,  # Need history for sequences
         "forecast_days": 6,  # Request 6 days to ensure 120h available from any time of day
-        "timezone": "Europe/Zurich"
+        "timezone": "UTC"  # Must match training (prepare_data_v2.py); DST shifted features otherwise
     }
     response = requests.get(url, params=params, timeout=30)
     response.raise_for_status()
@@ -113,9 +117,13 @@ def fetch_forecast():
 
 
 def prepare_features(hourly_data):
-    """Prepare feature matrix and time features."""
+    """Prepare feature matrix and time features.
+
+    Times are returned as tz-aware UTC datetimes — matches the convention used
+    when training features were generated.
+    """
     n_hours = len(hourly_data["time"])
-    times = [datetime.fromisoformat(t) for t in hourly_data["time"]]
+    times = [datetime.fromisoformat(t).replace(tzinfo=UTC) for t in hourly_data["time"]]
 
     # Build features dict
     features = {}
@@ -302,12 +310,10 @@ def apply_xgboost_model(model_info, features, times, fc_col):
 
 def generate_output(times, features, predictions):
     """Generate JSON output."""
-    # Filter to future hours only
+    # Filter to future hours only — times are tz-aware UTC, comparison is TZ-safe.
     now = datetime.now(TZ)
     start_idx = 0
     for i, t in enumerate(times):
-        if t.tzinfo is None:
-            t = t.replace(tzinfo=TZ)
         if t >= now:
             start_idx = i
             break
@@ -342,9 +348,11 @@ def generate_output(times, features, predictions):
     }
 
     for i in range(start_idx, end_idx):
-        t = times[i]
+        # Convert UTC → Europe/Zurich and emit a naive local-time string so
+        # forecast_history.json keys and the UI stay backwards compatible.
+        t_local = times[i].astimezone(TZ).replace(tzinfo=None)
         hour_data = {
-            "time": t.isoformat() if hasattr(t, 'isoformat') else str(t),
+            "time": t_local.isoformat(),
             "raw": {
                 "temperature": features["fc_temperature_2m"][i],
                 "apparent_temperature": features["fc_apparent_temperature"][i],
