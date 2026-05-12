@@ -1,134 +1,8 @@
 {
   "meta": {
-    "last_update": "2026-05-12T10:08:21.440701+02:00"
+    "last_update": "2026-05-13T00:01:06.153624+02:00"
   },
   "hourly": [
-    {
-      "time": "2026-04-28T11:00:00",
-      "temperature": 13.9,
-      "raw_temperature": 13.7,
-      "rain": 1.21,
-      "humidity": 80.0,
-      "wind_speed": 1.6,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T12:00:00",
-      "temperature": 14.4,
-      "raw_temperature": 14.3,
-      "rain": 1.32,
-      "humidity": 76.7,
-      "wind_speed": 1.6,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T13:00:00",
-      "temperature": 13.7,
-      "raw_temperature": 13.7,
-      "rain": 2.13,
-      "humidity": 83.0,
-      "wind_speed": 2.4,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T14:00:00",
-      "temperature": 14.7,
-      "raw_temperature": 14.5,
-      "rain": 1.63,
-      "humidity": 78.2,
-      "wind_speed": 2.7,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T15:00:00",
-      "temperature": 14.3,
-      "raw_temperature": 14.5,
-      "rain": 1.2,
-      "humidity": 82.9,
-      "wind_speed": 3.3,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T16:00:00",
-      "temperature": 14.0,
-      "raw_temperature": 14.4,
-      "rain": 0.9,
-      "humidity": 83.3,
-      "wind_speed": 4.0,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T17:00:00",
-      "temperature": 14.3,
-      "raw_temperature": 14.8,
-      "rain": 0.09,
-      "humidity": 80.6,
-      "wind_speed": 2.5,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T18:00:00",
-      "temperature": 14.2,
-      "raw_temperature": 14.6,
-      "rain": 0.14,
-      "humidity": 86.8,
-      "wind_speed": 3.1,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T19:00:00",
-      "temperature": 13.7,
-      "raw_temperature": 14.4,
-      "rain": 0,
-      "humidity": 88.3,
-      "wind_speed": 2.7,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T20:00:00",
-      "temperature": 13.4,
-      "raw_temperature": 13.9,
-      "rain": 0,
-      "humidity": 92.4,
-      "wind_speed": 3.5,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T21:00:00",
-      "temperature": 13.1,
-      "raw_temperature": 13.3,
-      "rain": 0.66,
-      "humidity": 92.1,
-      "wind_speed": 2.8,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T22:00:00",
-      "temperature": 12.9,
-      "raw_temperature": 13.0,
-      "rain": 0.4,
-      "humidity": 91.4,
-      "wind_speed": 3.9,
-      "forecast_made": "2026-04-27T20:05:02.666533+02:00"
-    },
-    {
-      "time": "2026-04-28T23:00:00",
-      "temperature": 13.5,
-      "raw_temperature": 13.4,
-      "rain": 0,
-      "humidity": 85.7,
-      "wind_speed": 3.9,
-      "forecast_made": "2026-04-28T22:18:05.838988+02:00"
-    },
-    {
-      "time": "2026-04-29T00:00:00",
-      "temperature": 13.1,
-      "raw_temperature": 13.1,
-      "rain": 0.26,
-      "humidity": 87.5,
-      "wind_speed": 3.3,
-      "forecast_made": "2026-04-28T22:18:05.838988+02:00"
-    },
     {
       "time": "2026-04-29T01:00:00",
       "temperature": 13.1,
@@ -3155,309 +3029,435 @@
     },
     {
       "time": "2026-05-13T01:00:00",
-      "temperature": 11.5,
-      "raw_temperature": 10.6,
+      "temperature": 12.3,
+      "raw_temperature": 11.0,
       "rain": 0.0,
-      "humidity": 49.7,
-      "wind_speed": 3.8,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 44.8,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T02:00:00",
-      "temperature": 11.5,
-      "raw_temperature": 10.7,
+      "temperature": 10.9,
+      "raw_temperature": 9.7,
       "rain": 0.0,
-      "humidity": 55.8,
-      "wind_speed": 3.5,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 52.5,
+      "wind_speed": 3.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T03:00:00",
-      "temperature": 10.7,
-      "raw_temperature": 10.0,
+      "temperature": 11.1,
+      "raw_temperature": 9.9,
       "rain": 0.0,
-      "humidity": 58.0,
-      "wind_speed": 4.0,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 58.4,
+      "wind_speed": 3.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T04:00:00",
-      "temperature": 10.6,
-      "raw_temperature": 9.9,
+      "temperature": 10.7,
+      "raw_temperature": 9.5,
       "rain": 0.0,
-      "humidity": 63.2,
-      "wind_speed": 3.2,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 61.9,
+      "wind_speed": 3.3,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T05:00:00",
-      "temperature": 10.3,
-      "raw_temperature": 9.6,
+      "temperature": 10.2,
+      "raw_temperature": 9.0,
       "rain": 0.0,
-      "humidity": 66.0,
-      "wind_speed": 2.5,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 66.2,
+      "wind_speed": 3.0,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T06:00:00",
-      "temperature": 10.2,
-      "raw_temperature": 9.3,
+      "temperature": 9.9,
+      "raw_temperature": 8.6,
       "rain": 0.0,
-      "humidity": 71.3,
-      "wind_speed": 3.3,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 72.6,
+      "wind_speed": 3.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T07:00:00",
-      "temperature": 10.5,
-      "raw_temperature": 9.4,
+      "temperature": 10.2,
+      "raw_temperature": 8.9,
       "rain": 0.0,
-      "humidity": 75.6,
-      "wind_speed": 3.0,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 77.0,
+      "wind_speed": 2.6,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T08:00:00",
-      "temperature": 11.5,
-      "raw_temperature": 10.8,
-      "rain": 0.02,
-      "humidity": 79.8,
-      "wind_speed": 2.1,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 11.1,
+      "raw_temperature": 10.3,
+      "rain": 0.0,
+      "humidity": 77.3,
+      "wind_speed": 1.6,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T09:00:00",
-      "temperature": 11.9,
-      "raw_temperature": 11.8,
-      "rain": 0.0,
-      "humidity": 75.0,
-      "wind_speed": 1.5,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 11.1,
+      "raw_temperature": 11.3,
+      "rain": 0.01,
+      "humidity": 73.4,
+      "wind_speed": 1.4,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T10:00:00",
-      "temperature": 13.6,
-      "raw_temperature": 13.0,
-      "rain": 0.0,
-      "humidity": 69.2,
-      "wind_speed": 1.8,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 12.2,
+      "raw_temperature": 12.5,
+      "rain": 0.02,
+      "humidity": 70.9,
+      "wind_speed": 1.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T11:00:00",
-      "temperature": 16.0,
-      "raw_temperature": 14.1,
+      "temperature": 14.0,
+      "raw_temperature": 13.3,
       "rain": 0.0,
-      "humidity": 56.4,
+      "humidity": 62.2,
       "wind_speed": 1.9,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T12:00:00",
-      "temperature": 17.8,
-      "raw_temperature": 15.0,
+      "temperature": 15.5,
+      "raw_temperature": 14.1,
       "rain": 0.0,
-      "humidity": 49.1,
-      "wind_speed": 2.6,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 58.5,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T13:00:00",
-      "temperature": 18.9,
-      "raw_temperature": 15.7,
+      "temperature": 18.0,
+      "raw_temperature": 15.3,
       "rain": 0.0,
       "humidity": 46.2,
-      "wind_speed": 2.8,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "wind_speed": 2.4,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T14:00:00",
-      "temperature": 19.9,
-      "raw_temperature": 16.3,
+      "temperature": 19.3,
+      "raw_temperature": 16.0,
       "rain": 0.0,
-      "humidity": 45.9,
-      "wind_speed": 2.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 43.6,
+      "wind_speed": 2.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T15:00:00",
-      "temperature": 19.9,
-      "raw_temperature": 16.5,
+      "temperature": 19.6,
+      "raw_temperature": 16.3,
       "rain": 0.0,
-      "humidity": 47.1,
-      "wind_speed": 2.6,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 43.7,
+      "wind_speed": 2.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T16:00:00",
-      "temperature": 19.5,
-      "raw_temperature": 16.5,
+      "temperature": 19.3,
+      "raw_temperature": 16.3,
       "rain": 0.0,
-      "humidity": 47.7,
-      "wind_speed": 2.0,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 46.3,
+      "wind_speed": 1.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T17:00:00",
-      "temperature": 18.5,
-      "raw_temperature": 16.2,
+      "temperature": 18.4,
+      "raw_temperature": 15.9,
       "rain": 0.0,
       "humidity": 52.0,
       "wind_speed": 1.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T18:00:00",
-      "temperature": 16.3,
-      "raw_temperature": 15.5,
+      "temperature": 16.5,
+      "raw_temperature": 15.2,
       "rain": 0.0,
-      "humidity": 58.4,
-      "wind_speed": 1.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 56.4,
+      "wind_speed": 2.3,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T19:00:00",
-      "temperature": 13.8,
-      "raw_temperature": 14.7,
+      "temperature": 14.4,
+      "raw_temperature": 14.4,
       "rain": 0.0,
-      "humidity": 65.4,
-      "wind_speed": 3.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 62.1,
+      "wind_speed": 3.2,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T20:00:00",
-      "temperature": 13.8,
-      "raw_temperature": 13.7,
+      "temperature": 13.7,
+      "raw_temperature": 13.2,
       "rain": 0.0,
-      "humidity": 68.1,
-      "wind_speed": 3.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 68.6,
+      "wind_speed": 4.4,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T21:00:00",
-      "temperature": 13.7,
-      "raw_temperature": 13.0,
+      "temperature": 13.4,
+      "raw_temperature": 12.5,
       "rain": 0.0,
-      "humidity": 68.5,
-      "wind_speed": 3.8,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 70.4,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T22:00:00",
-      "temperature": 13.5,
-      "raw_temperature": 12.8,
+      "temperature": 12.8,
+      "raw_temperature": 11.9,
       "rain": 0.0,
-      "humidity": 69.0,
-      "wind_speed": 3.9,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 71.7,
+      "wind_speed": 3.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-13T23:00:00",
-      "temperature": 13.2,
-      "raw_temperature": 12.6,
+      "temperature": 12.4,
+      "raw_temperature": 11.7,
       "rain": 0.0,
-      "humidity": 70.8,
-      "wind_speed": 4.1,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 71.9,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T00:00:00",
-      "temperature": 12.4,
+      "temperature": 12.2,
       "raw_temperature": 11.5,
       "rain": 0.0,
-      "humidity": 73.1,
-      "wind_speed": 3.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 72.2,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T01:00:00",
-      "temperature": 11.9,
-      "raw_temperature": 11.1,
-      "rain": 0.0,
-      "humidity": 74.7,
-      "wind_speed": 4.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 11.7,
+      "raw_temperature": 11.0,
+      "rain": 0.02,
+      "humidity": 73.8,
+      "wind_speed": 4.0,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T02:00:00",
-      "temperature": 10.6,
-      "raw_temperature": 9.7,
-      "rain": 0.04,
-      "humidity": 81.6,
-      "wind_speed": 3.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 11.6,
+      "raw_temperature": 10.9,
+      "rain": 0.09,
+      "humidity": 76.1,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T03:00:00",
-      "temperature": 11.0,
-      "raw_temperature": 10.4,
-      "rain": 0.13,
-      "humidity": 72.3,
-      "wind_speed": 4.5,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 11.2,
+      "raw_temperature": 10.8,
+      "rain": 0.25,
+      "humidity": 79.7,
+      "wind_speed": 3.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T04:00:00",
-      "temperature": 11.1,
+      "temperature": 10.6,
       "raw_temperature": 10.3,
-      "rain": 0.08,
-      "humidity": 68.8,
-      "wind_speed": 4.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "rain": 0.39,
+      "humidity": 75.7,
+      "wind_speed": 4.0,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T05:00:00",
       "temperature": 10.3,
-      "raw_temperature": 9.4,
-      "rain": 0.06,
-      "humidity": 67.8,
-      "wind_speed": 4.2,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "raw_temperature": 9.6,
+      "rain": 0.31,
+      "humidity": 72.7,
+      "wind_speed": 3.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T06:00:00",
-      "temperature": 9.7,
-      "raw_temperature": 9.0,
-      "rain": 0.02,
-      "humidity": 68.4,
-      "wind_speed": 4.0,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 10.3,
+      "raw_temperature": 9.8,
+      "rain": 0.3,
+      "humidity": 70.5,
+      "wind_speed": 3.9,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T07:00:00",
-      "temperature": 10.0,
-      "raw_temperature": 9.8,
-      "rain": 0.01,
-      "humidity": 69.8,
-      "wind_speed": 3.7,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 10.3,
+      "raw_temperature": 9.9,
+      "rain": 0.19,
+      "humidity": 69.7,
+      "wind_speed": 3.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T08:00:00",
-      "temperature": 9.6,
-      "raw_temperature": 10.9,
-      "rain": 0.01,
-      "humidity": 72.9,
-      "wind_speed": 2.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 10.7,
+      "raw_temperature": 10.6,
+      "rain": 0.47,
+      "humidity": 78.7,
+      "wind_speed": 2.5,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T09:00:00",
-      "temperature": 10.1,
-      "raw_temperature": 11.8,
-      "rain": 0.06,
-      "humidity": 69.5,
-      "wind_speed": 2.8,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "temperature": 10.0,
+      "raw_temperature": 11.3,
+      "rain": 0.46,
+      "humidity": 75.8,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     },
     {
       "time": "2026-05-14T10:00:00",
-      "temperature": 11.7,
-      "raw_temperature": 12.8,
+      "temperature": 11.1,
+      "raw_temperature": 12.3,
+      "rain": 0.26,
+      "humidity": 73.1,
+      "wind_speed": 2.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T11:00:00",
+      "temperature": 13.4,
+      "raw_temperature": 13.8,
+      "rain": 0.0,
+      "humidity": 62.2,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T12:00:00",
+      "temperature": 14.5,
+      "raw_temperature": 14.4,
+      "rain": 0.0,
+      "humidity": 62.1,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T13:00:00",
+      "temperature": 13.2,
+      "raw_temperature": 13.6,
+      "rain": 0.53,
+      "humidity": 62.4,
+      "wind_speed": 3.2,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T14:00:00",
+      "temperature": 12.1,
+      "raw_temperature": 11.6,
+      "rain": 0.22,
+      "humidity": 63.6,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T15:00:00",
+      "temperature": 15.4,
+      "raw_temperature": 13.7,
+      "rain": 0.0,
+      "humidity": 60.1,
+      "wind_speed": 2.8,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T16:00:00",
+      "temperature": 15.5,
+      "raw_temperature": 13.8,
+      "rain": 0.0,
+      "humidity": 58.9,
+      "wind_speed": 2.0,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T17:00:00",
+      "temperature": 13.9,
+      "raw_temperature": 12.2,
+      "rain": 0,
+      "humidity": 61.8,
+      "wind_speed": 2.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T18:00:00",
+      "temperature": 12.0,
+      "raw_temperature": 12.5,
+      "rain": 0,
+      "humidity": 63.2,
+      "wind_speed": 3.6,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T19:00:00",
+      "temperature": 12.0,
+      "raw_temperature": 11.9,
+      "rain": 0.0,
+      "humidity": 71.2,
+      "wind_speed": 4.2,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T20:00:00",
+      "temperature": 10.3,
+      "raw_temperature": 10.3,
       "rain": 0.15,
-      "humidity": 70.5,
-      "wind_speed": 2.4,
-      "forecast_made": "2026-05-12T10:08:21.440701+02:00"
+      "humidity": 74.9,
+      "wind_speed": 5.6,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T21:00:00",
+      "temperature": 10.3,
+      "raw_temperature": 9.5,
+      "rain": 0.0,
+      "humidity": 74.1,
+      "wind_speed": 4.3,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T22:00:00",
+      "temperature": 9.6,
+      "raw_temperature": 8.8,
+      "rain": 0.0,
+      "humidity": 74.0,
+      "wind_speed": 5.1,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-14T23:00:00",
+      "temperature": 9.2,
+      "raw_temperature": 8.4,
+      "rain": 0.0,
+      "humidity": 71.5,
+      "wind_speed": 5.2,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
+    },
+    {
+      "time": "2026-05-15T00:00:00",
+      "temperature": 8.9,
+      "raw_temperature": 8.0,
+      "rain": 0.0,
+      "humidity": 71.0,
+      "wind_speed": 5.7,
+      "forecast_made": "2026-05-13T00:01:06.153624+02:00"
     }
   ]
 }
