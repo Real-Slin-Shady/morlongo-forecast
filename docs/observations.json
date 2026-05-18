@@ -1,30 +1,30 @@
 {
   "meta": {
     "station_name": "Morlongo 17 (Weather Station)",
-    "last_update": "2026-05-18T19:15:17.816594+02:00",
+    "last_update": "2026-05-18T21:10:07.384264+02:00",
     "history_days": 30,
-    "observation_count": 435
+    "observation_count": 433
   },
   "current": {
-    "time": "2026-05-18T19:15:17.816594+02:00",
+    "time": "2026-05-18T21:10:07.384264+02:00",
     "station_name": "Morlongo 17 (Weather Station)",
     "indoor": {
       "temperature": 17.3,
-      "humidity": 45,
-      "pressure": 1015.6,
-      "co2": 397,
+      "humidity": 46,
+      "pressure": 1016,
+      "co2": 404,
       "noise": 32,
-      "time_utc": 1779124451
+      "time_utc": 1779131361
     },
     "outdoor": {
-      "temperature": 11.9,
-      "humidity": 89,
-      "time_utc": 1779124437
+      "temperature": 9.4,
+      "humidity": 88,
+      "time_utc": 1779131360
     },
     "rain": {
       "rain_1h": 0,
       "rain_24h": 2.7,
-      "time_utc": 1779124450
+      "time_utc": 1779131360
     },
     "wind": {
       "wind_strength": null,
@@ -35,93 +35,6 @@
     }
   },
   "observations": [
-    {
-      "time": "2026-04-18T19:28:16.549983+02:00",
-      "station_name": "Morlongo 17 (Weather Station)",
-      "indoor": {
-        "temperature": 19.7,
-        "humidity": 52,
-        "pressure": 1016.4,
-        "co2": 484,
-        "noise": 32,
-        "time_utc": 1776533293
-      },
-      "outdoor": {
-        "temperature": 20.7,
-        "humidity": 60,
-        "time_utc": 1776533266
-      },
-      "rain": {
-        "rain_1h": 0,
-        "rain_24h": 0,
-        "time_utc": 1776533285
-      },
-      "wind": {
-        "wind_strength": 2,
-        "wind_angle": 20,
-        "gust_strength": 5,
-        "gust_angle": 46,
-        "time_utc": 1776533292
-      }
-    },
-    {
-      "time": "2026-04-18T20:00:14.188256+02:00",
-      "station_name": "Morlongo 17 (Weather Station)",
-      "indoor": {
-        "temperature": 20.5,
-        "humidity": 52,
-        "pressure": 1016.5,
-        "co2": 584,
-        "noise": 46,
-        "time_utc": 1776535110
-      },
-      "outdoor": {
-        "temperature": 19.7,
-        "humidity": 62,
-        "time_utc": 1776535060
-      },
-      "rain": {
-        "rain_1h": 0,
-        "rain_24h": 0,
-        "time_utc": 1776535105
-      },
-      "wind": {
-        "wind_strength": 2,
-        "wind_angle": 37,
-        "gust_strength": 5,
-        "gust_angle": 21,
-        "time_utc": 1776535105
-      }
-    },
-    {
-      "time": "2026-04-18T20:49:25.790772+02:00",
-      "station_name": "Morlongo 17 (Weather Station)",
-      "indoor": {
-        "temperature": 21,
-        "humidity": 53,
-        "pressure": 1017.1,
-        "co2": 1165,
-        "noise": 41,
-        "time_utc": 1776537806
-      },
-      "outdoor": {
-        "temperature": 18.7,
-        "humidity": 65,
-        "time_utc": 1776537778
-      },
-      "rain": {
-        "rain_1h": 0,
-        "rain_24h": 0,
-        "time_utc": 1776537797
-      },
-      "wind": {
-        "wind_strength": 2,
-        "wind_angle": 49,
-        "gust_strength": 5,
-        "gust_angle": 53,
-        "time_utc": 1776537803
-      }
-    },
     {
       "time": "2026-04-18T21:33:26.449935+02:00",
       "station_name": "Morlongo 17 (Weather Station)",
@@ -12641,6 +12554,35 @@
         "rain_1h": 0,
         "rain_24h": 2.7,
         "time_utc": 1779124450
+      },
+      "wind": {
+        "wind_strength": null,
+        "wind_angle": null,
+        "gust_strength": null,
+        "gust_angle": null,
+        "time_utc": null
+      }
+    },
+    {
+      "time": "2026-05-18T21:10:07.384264+02:00",
+      "station_name": "Morlongo 17 (Weather Station)",
+      "indoor": {
+        "temperature": 17.3,
+        "humidity": 46,
+        "pressure": 1016,
+        "co2": 404,
+        "noise": 32,
+        "time_utc": 1779131361
+      },
+      "outdoor": {
+        "temperature": 9.4,
+        "humidity": 88,
+        "time_utc": 1779131360
+      },
+      "rain": {
+        "rain_1h": 0,
+        "rain_24h": 2.7,
+        "time_utc": 1779131360
       },
       "wind": {
         "wind_strength": null,
