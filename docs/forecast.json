@@ -3,115 +3,11 @@
     "location": "Morlongo",
     "lat": 46.021245,
     "lon": 8.239861,
-    "generated_at": "2026-06-27T18:01:05.577801+02:00",
+    "generated_at": "2026-06-27T22:02:54.323832+02:00",
     "model": "V4 Hybrid: Conv1D+MLP (temp/humidity/rain) + XGBoost (wind)",
-    "forecast_hours": 116
+    "forecast_hours": 112
   },
   "hourly": [
-    {
-      "time": "2026-06-27T19:00:00",
-      "raw": {
-        "temperature": 27.6,
-        "apparent_temperature": 29.2,
-        "humidity": 54,
-        "precipitation": 0.0,
-        "precipitation_probability": 38,
-        "wind_speed": 7.8,
-        "wind_gusts": 37.4,
-        "wind_direction": 338,
-        "cloud_cover": 100,
-        "pressure": 1020.8,
-        "weather_code": 3,
-        "vpd": 1.7,
-        "et0": 0.17,
-        "is_day": 1
-      },
-      "debiased": {
-        "temperature": 19.4,
-        "humidity": 67.8,
-        "wind_speed": 2.5,
-        "gust_speed": 12.6,
-        "rain": 0
-      }
-    },
-    {
-      "time": "2026-06-27T20:00:00",
-      "raw": {
-        "temperature": 26.4,
-        "apparent_temperature": 28.5,
-        "humidity": 55,
-        "precipitation": 0.0,
-        "precipitation_probability": 33,
-        "wind_speed": 1.8,
-        "wind_gusts": 23.8,
-        "wind_direction": 259,
-        "cloud_cover": 100,
-        "pressure": 1021.8,
-        "weather_code": 3,
-        "vpd": 1.55,
-        "et0": 0.07,
-        "is_day": 1
-      },
-      "debiased": {
-        "temperature": 22.8,
-        "humidity": 69.7,
-        "wind_speed": 1.9,
-        "gust_speed": 9.1,
-        "rain": 0
-      }
-    },
-    {
-      "time": "2026-06-27T21:00:00",
-      "raw": {
-        "temperature": 21.3,
-        "apparent_temperature": 21.9,
-        "humidity": 77,
-        "precipitation": 4.3,
-        "precipitation_probability": 43,
-        "wind_speed": 13.3,
-        "wind_gusts": 37.1,
-        "wind_direction": 311,
-        "cloud_cover": 100,
-        "pressure": 1024.0,
-        "weather_code": 63,
-        "vpd": 0.59,
-        "et0": 0.06,
-        "is_day": 1
-      },
-      "debiased": {
-        "temperature": 21.5,
-        "humidity": 77.9,
-        "wind_speed": 4.0,
-        "gust_speed": 14.0,
-        "rain": 3.58
-      }
-    },
-    {
-      "time": "2026-06-27T22:00:00",
-      "raw": {
-        "temperature": 20.5,
-        "apparent_temperature": 22.6,
-        "humidity": 88,
-        "precipitation": 0.0,
-        "precipitation_probability": 14,
-        "wind_speed": 7.2,
-        "wind_gusts": 32.0,
-        "wind_direction": 37,
-        "cloud_cover": 100,
-        "pressure": 1025.5,
-        "weather_code": 3,
-        "vpd": 0.3,
-        "et0": 0.02,
-        "is_day": 0
-      },
-      "debiased": {
-        "temperature": 21.1,
-        "humidity": 86.6,
-        "wind_speed": 3.0,
-        "gust_speed": 13.7,
-        "rain": 0.0
-      }
-    },
     {
       "time": "2026-06-27T23:00:00",
       "raw": {
