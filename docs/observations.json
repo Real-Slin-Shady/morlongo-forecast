@@ -1,37 +1,37 @@
 {
   "meta": {
     "station_name": "Morlongo 17 (Weather Station)",
-    "last_update": "2026-08-09T01:50:46.485500+02:00",
+    "last_update": "2026-08-09T02:42:58.809813+02:00",
     "history_days": 30,
-    "observation_count": 431
+    "observation_count": 432
   },
   "current": {
-    "time": "2026-08-09T01:50:46.485500+02:00",
+    "time": "2026-08-09T02:42:58.809813+02:00",
     "station_name": "Morlongo 17 (Weather Station)",
     "indoor": {
       "temperature": 26.9,
       "humidity": 54,
-      "pressure": 1020.8,
-      "co2": 567,
+      "pressure": 1020.6,
+      "co2": 555,
       "noise": 33,
-      "time_utc": 1786232678
+      "time_utc": 1786235706
     },
     "outdoor": {
       "temperature": 24.1,
       "humidity": 67,
-      "time_utc": 1786232667
+      "time_utc": 1786235692
     },
     "rain": {
       "rain_1h": 0,
       "rain_24h": 0,
-      "time_utc": 1786232667
+      "time_utc": 1786235705
     },
     "wind": {
       "wind_strength": 1,
-      "wind_angle": 26,
-      "gust_strength": 5,
+      "wind_angle": 33,
+      "gust_strength": 4,
       "gust_angle": 30,
-      "time_utc": 1786232449
+      "time_utc": 1786235583
     }
   },
   "observations": [
@@ -12532,6 +12532,35 @@
         "gust_strength": 5,
         "gust_angle": 30,
         "time_utc": 1786232449
+      }
+    },
+    {
+      "time": "2026-08-09T02:42:58.809813+02:00",
+      "station_name": "Morlongo 17 (Weather Station)",
+      "indoor": {
+        "temperature": 26.9,
+        "humidity": 54,
+        "pressure": 1020.6,
+        "co2": 555,
+        "noise": 33,
+        "time_utc": 1786235706
+      },
+      "outdoor": {
+        "temperature": 24.1,
+        "humidity": 67,
+        "time_utc": 1786235692
+      },
+      "rain": {
+        "rain_1h": 0,
+        "rain_24h": 0,
+        "time_utc": 1786235705
+      },
+      "wind": {
+        "wind_strength": 1,
+        "wind_angle": 33,
+        "gust_strength": 4,
+        "gust_angle": 30,
+        "time_utc": 1786235583
       }
     }
   ]
