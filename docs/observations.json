@@ -1,37 +1,37 @@
 {
   "meta": {
     "station_name": "Morlongo 17 (Weather Station)",
-    "last_update": "2026-08-15T18:47:02.135413+02:00",
+    "last_update": "2026-08-15T19:10:53.801295+02:00",
     "history_days": 30,
-    "observation_count": 494
+    "observation_count": 495
   },
   "current": {
-    "time": "2026-08-15T18:47:02.135413+02:00",
+    "time": "2026-08-15T19:10:53.801295+02:00",
     "station_name": "Morlongo 17 (Weather Station)",
     "indoor": {
       "temperature": 27.9,
       "humidity": 50,
-      "pressure": 1015.4,
-      "co2": 508,
-      "noise": 32,
-      "time_utc": 1786812106
+      "pressure": 1015.3,
+      "co2": 466,
+      "noise": 36,
+      "time_utc": 1786813313
     },
     "outdoor": {
       "temperature": 28.2,
       "humidity": 54,
-      "time_utc": 1786812069
+      "time_utc": 1786813300
     },
     "rain": {
       "rain_1h": 0,
       "rain_24h": 0,
-      "time_utc": 1786812095
+      "time_utc": 1786813300
     },
     "wind": {
       "wind_strength": 2,
-      "wind_angle": 11,
+      "wind_angle": 8,
       "gust_strength": 2,
-      "gust_angle": 11,
-      "time_utc": 1786811601
+      "gust_angle": 8,
+      "time_utc": 1786813242
     }
   },
   "observations": [
@@ -14359,6 +14359,35 @@
         "gust_strength": 2,
         "gust_angle": 11,
         "time_utc": 1786811601
+      }
+    },
+    {
+      "time": "2026-08-15T19:10:53.801295+02:00",
+      "station_name": "Morlongo 17 (Weather Station)",
+      "indoor": {
+        "temperature": 27.9,
+        "humidity": 50,
+        "pressure": 1015.3,
+        "co2": 466,
+        "noise": 36,
+        "time_utc": 1786813313
+      },
+      "outdoor": {
+        "temperature": 28.2,
+        "humidity": 54,
+        "time_utc": 1786813300
+      },
+      "rain": {
+        "rain_1h": 0,
+        "rain_24h": 0,
+        "time_utc": 1786813300
+      },
+      "wind": {
+        "wind_strength": 2,
+        "wind_angle": 8,
+        "gust_strength": 2,
+        "gust_angle": 8,
+        "time_utc": 1786813242
       }
     }
   ]
