@@ -1,37 +1,37 @@
 {
   "meta": {
     "station_name": "Morlongo 17 (Weather Station)",
-    "last_update": "2026-08-15T07:14:30.252433+02:00",
+    "last_update": "2026-08-15T07:47:54.497705+02:00",
     "history_days": 30,
-    "observation_count": 479
+    "observation_count": 480
   },
   "current": {
-    "time": "2026-08-15T07:14:30.252433+02:00",
+    "time": "2026-08-15T07:47:54.497705+02:00",
     "station_name": "Morlongo 17 (Weather Station)",
     "indoor": {
       "temperature": 27.9,
       "humidity": 48,
       "pressure": 1019.1,
-      "co2": 513,
+      "co2": 522,
       "noise": 33,
-      "time_utc": 1786770596
+      "time_utc": 1786772412
     },
     "outdoor": {
-      "temperature": 22.1,
+      "temperature": 22.2,
       "humidity": 59,
-      "time_utc": 1786770592
+      "time_utc": 1786772387
     },
     "rain": {
       "rain_1h": 0,
       "rain_24h": 0,
-      "time_utc": 1786770592
+      "time_utc": 1786772399
     },
     "wind": {
       "wind_strength": 1,
-      "wind_angle": 29,
+      "wind_angle": 45,
       "gust_strength": 5,
-      "gust_angle": 90,
-      "time_utc": 1786770592
+      "gust_angle": 195,
+      "time_utc": 1786772406
     }
   },
   "observations": [
@@ -13924,6 +13924,35 @@
         "gust_strength": 5,
         "gust_angle": 90,
         "time_utc": 1786770592
+      }
+    },
+    {
+      "time": "2026-08-15T07:47:54.497705+02:00",
+      "station_name": "Morlongo 17 (Weather Station)",
+      "indoor": {
+        "temperature": 27.9,
+        "humidity": 48,
+        "pressure": 1019.1,
+        "co2": 522,
+        "noise": 33,
+        "time_utc": 1786772412
+      },
+      "outdoor": {
+        "temperature": 22.2,
+        "humidity": 59,
+        "time_utc": 1786772387
+      },
+      "rain": {
+        "rain_1h": 0,
+        "rain_24h": 0,
+        "time_utc": 1786772399
+      },
+      "wind": {
+        "wind_strength": 1,
+        "wind_angle": 45,
+        "gust_strength": 5,
+        "gust_angle": 195,
+        "time_utc": 1786772406
       }
     }
   ]
